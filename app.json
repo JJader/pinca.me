@@ -1,0 +1,12 @@
+{
+  "name": "final",
+  "displayName": "final",
+  "expo": {
+    "name": "final",
+    "slug": "final",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
