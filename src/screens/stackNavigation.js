@@ -21,7 +21,7 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="start">
-        {isUserCurrent ? (
+        {!isUserCurrent ? (
           <>
             <Stack.Screen
               name="start"

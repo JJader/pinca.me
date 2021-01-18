@@ -46,7 +46,7 @@ export default function loginScree({ navigation }) {
           onChangeText={setPassword}
           secureTextEntry={true}
         ></TextInput>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => trySignIn()}>
           <Text style={{ fontSize: 15, color: "white", fontWeight: "bold" }}>
             LOG IN
           </Text>

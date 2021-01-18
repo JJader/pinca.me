@@ -1,70 +1,71 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
-import { getAllPosts } from '../api/posts'
-import { getUserData } from '../api/user'
-import { auth, database } from '../config/firebase'
+import { getAllPosts } from "../api/posts";
+import { getUserData } from "../api/user";
+import { auth, database } from "../config/firebase";
+
+import { AntDesign } from "@expo/vector-icons";
+import { singOut } from "../api/login";
 
 export default function profileScreen({ user }) {
   const [posts, setPosts] = useState([]);
-  const [isCurrentUser, setIsCurrentUser] = useState(false)
-  const [userName, setUsername] = useState(false)
+  const [isCurrentUser, setIsCurrentUser] = useState(false);
+  const [userName, setUsername] = useState(false);
 
   useEffect(() => {
-    let currentUser = auth.currentUser.uid
+    let currentUser = auth.currentUser.uid;
 
     if (user && user.id != currentUser) {
-      setIsCurrentUser(false)
-      getOtherPosts(user.id)
-      getUser(user.id)
+      setIsCurrentUser(false);
+      getOtherPosts(user.id);
+      getUser(user.id);
+    } else {
+      setIsCurrentUser(true);
+      getCurrentPosts(currentUser);
+      getUser(currentUser);
     }
-    else {
-      setIsCurrentUser(true)
-      getCurrentPosts(currentUser)
-      getUser(currentUser)
-    }
-  }, [])
+  }, []);
 
   function getOtherPosts(id) {
     getAllPosts(id).then((snapshot) => {
       let posts = snapshot.docs.map((doc) => {
-        const data = doc.data()
-        const id = doc.id
-        return { id, ...data }
-      })
+        const data = doc.data();
+        const id = doc.id;
+        return { id, ...data };
+      });
 
-      setPosts(posts)
-      console.log(posts)
-    })
+      setPosts(posts);
+      console.log(posts);
+    });
   }
 
   function getCurrentPosts(id) {
     // Depois penso em uma forma mais eficiente de fazer isso
-    database.collection('posts')
+    database
+      .collection("posts")
       .doc(id)
-      .collection('userPosts')
-      .orderBy("creation", 'asc')
+      .collection("userPosts")
+      .orderBy("creation", "asc")
       .onSnapshot((query) => {
         const list = [];
 
         query.forEach((doc) => {
-          list.push(
-            {
-              ...doc.data(),
-              id: doc.id,
-            }
-          );
-        })
+          list.push({
+            ...doc.data(),
+            id: doc.id,
+          });
+        });
         setPosts(list);
-      })
+      });
   }
 
   function getUser(id) {
     getUserData(id).then((snapshot) => {
-      const name = snapshot.data().name
-      setUsername(name)
-    })
+      const name = snapshot.data().name;
+      setUsername(name);
+    });
   }
 
   function card(item) {
@@ -75,31 +76,31 @@ export default function profileScreen({ user }) {
         <Text>{item.end}</Text>
         <Text>{item.descrition}</Text>
       </View>
-    )
+    );
   }
 
   return (
     <View style={styles.container}>
+      <AntDesign
+        name="back"
+        size={24}
+        color="#808080"
+        style={{ marginTop: 50 }}
+        onPress={() => singOut().then()}
+      />
       <Text>{userName}</Text>
-      {
-        isCurrentUser ?
-          (
-            <Text style={styles.title}>Editar</Text>
-          )
-          :
-          (
-            <Text style={styles.title}>Bater um papo</Text>
-          )
-      }
+      {isCurrentUser ? (
+        <Text style={styles.title}>Editar</Text>
+      ) : (
+        <Text style={styles.title}>Bater um papo</Text>
+      )}
       <FlatList
         data={posts}
-        renderItem={({ item }) => (
-          card(item)
-        )}
+        renderItem={({ item }) => card(item)}
         key={({ item }) => item.id}
       />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -109,15 +110,14 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    backgroundColor: 'grey',
+    backgroundColor: "grey",
     marginVertical: 20,
-    alignSelf: 'center',
-    padding: 20
+    alignSelf: "center",
+    padding: 20,
   },
 
   title: {
     fontSize: 20,
-    fontWeight: 'bold'
-  }
-})
-
+    fontWeight: "bold",
+  },
+});
