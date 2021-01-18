@@ -3,7 +3,7 @@ import SignUpScreen from "./signUpScreen";
 import FeedScreen from "./feedScreen";
 import MakeProjectScreen from "./createProject";
 import SearchScreen from "./searchScreen";
-import ProfileScree from "./profileScreen";
+import ProfileScreen from "./profileScreen";
 import FirstScreen from "./firstScreen";
 import RegisterStep2 from "./registerStep2";
 
@@ -13,7 +13,7 @@ export {
   FeedScreen,
   MakeProjectScreen,
   SearchScreen,
-  ProfileScree,
+  ProfileScreen,
   FirstScreen,
   RegisterStep2,
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,33 +6,31 @@ import {
   FlatList,
   StyleSheet,
   Modal,
-  TouchableOpacity
-} from 'react-native'
+  TouchableOpacity,
+} from "react-native";
 
-import { searchByName } from '../api/user'
-import ProfileScree from './profileScreen'
+import { searchByName } from "../api/user";
+import ProfileScreen from "./profileScreen";
 export default function search() {
-
-  const [users, setUsers] = useState([])
-  const [userFound, setUserFound] = useState('')
-  const [isFind, setIsFind] = useState(false)
+  const [users, setUsers] = useState([]);
+  const [userFound, setUserFound] = useState("");
+  const [isFind, setIsFind] = useState(false);
 
   const searchUser = (search) => {
-    if (search == '') {
-      setUsers([])
-    }
-    else {
+    if (search == "") {
+      setUsers([]);
+    } else {
       searchByName(search).then((snapshot) => {
         let users = snapshot.docs.map((doc) => {
           const data = doc.data()
           const id = doc.id
-          const close = setIsFind(false)
+          const close = () => { return setIsFind(false) }
           return { id, close, ...data }
         })
         setUsers(users)
       })
     }
-  }
+  };
 
   function ProfileModal() {
     return (
@@ -42,16 +40,14 @@ export default function search() {
         visible={isFind}
         onRequestClose={() => closeModal()}
       >
-
-        <ProfileScree user={userFound} />
-
+        <ProfileScreen user={userFound} />
       </Modal>
-    )
+    );
   }
 
   function closeModal() {
-    setUserFound('')
-    setIsFind(false)
+    setUserFound("");
+    setIsFind(false);
   }
 
   function userItem(item) {
@@ -60,15 +56,15 @@ export default function search() {
         style={styles.buttonItem}
         onPress={() => clickOnUser(item)}
       >
-        <Text style={styles.name}>{item.name}  </Text>
+        <Text style={styles.name}>{item.name} </Text>
         <Text style={styles.email}> {item.email}</Text>
       </TouchableOpacity>
-    )
+    );
   }
 
   function clickOnUser(user) {
-    setUserFound(user)
-    setIsFind(true)
+    setUserFound(user);
+    setIsFind(true);
   }
 
   return (
@@ -81,15 +77,13 @@ export default function search() {
       />
       <FlatList
         data={users}
-        renderItem={({ item }) => (
-          userItem(item)
-        )}
+        renderItem={({ item }) => userItem(item)}
         key={({ item }) => item.id}
       />
 
       <ProfileModal />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -106,28 +100,24 @@ const styles = StyleSheet.create({
   input: {
     padding: 10,
     maxHeight: 75,
-    borderColor: 'grey',
+    borderColor: "grey",
     borderWidth: 1,
     borderRadius: 10,
-    marginVertical: 20
+    marginVertical: 20,
   },
 
   buttonItem: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   name: {
-    fontWeight: 'bold',
-    fontSize: 20
+    fontWeight: "bold",
+    fontSize: 20,
   },
 
   email: {
-    color: '#bbbbbb'
-  }
-
-
-
-})
-
+    color: "#bbbbbb",
+  },
+});
