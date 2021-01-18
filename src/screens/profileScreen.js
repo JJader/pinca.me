@@ -103,7 +103,19 @@ export default function profileScreen({ user }) {
         )
         :
         (
-          <Text style={styles.title}>Bater um papo</Text>
+          <>
+            <AntDesign
+              name="back"
+              size={24}
+              color="#808080"
+              style={{ marginTop: 50 }}
+              onPress={() => {
+                user.close()
+                auth.signOut()
+              }}
+            />
+            <Text style={styles.title}>Bater um papo</Text>
+          </>
         )
       }
       <FlatList
