@@ -2,27 +2,20 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  StatusBar,
-  TouchableOpacity,
-  TextInput,
   StyleSheet,
+  TextInput,
+  TouchableOpacity,
 } from "react-native";
 
 import { AntDesign } from "@expo/vector-icons";
 
-import { signIn } from "../api/login";
+import * as firebase from "firebase";
 
-export default function loginScree({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  function trySignIn() {
-    signIn({ email, password }).then();
-  }
+export default function registerStep2({ navigation }) {
+  const [nickname, setNickName] = useState();
 
   return (
-    <View style={styles.container}>
-      <StatusBar />
+    <View style={styles.containter}>
       <AntDesign
         name="back"
         size={24}
@@ -30,28 +23,23 @@ export default function loginScree({ navigation }) {
         style={styles.backButton}
         onPress={() => navigation.goBack()}
       />
-      <Text style={styles.text}>Log in</Text>
-
+      <Text style={styles.text}>Registre-se</Text>
       <View style={styles.inputForm}>
         <TextInput
           style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-        ></TextInput>
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={true}
+          placeholder="Apelido"
+          value={nickname}
+          onChangeText={setNickName}
         ></TextInput>
         <TouchableOpacity style={styles.button}>
           <Text style={{ fontSize: 15, color: "white", fontWeight: "bold" }}>
-            LOG IN
+            REGISTRAR
           </Text>
         </TouchableOpacity>
       </View>
+      <Text style={styles.policy}>
+        By signing up, you agree to our Terms of Service and Privacy Policy.
+      </Text>
     </View>
   );
 }
@@ -93,5 +81,11 @@ const styles = StyleSheet.create({
   backButton: {
     marginLeft: 15,
     marginTop: 32,
+  },
+  policy: {
+    marginTop: 32,
+    marginLeft: 20,
+    marginRight: 20,
+    justifyContent: "center",
   },
 });
