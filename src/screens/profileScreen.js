@@ -6,7 +6,7 @@ import { getAllPosts } from "../api/posts";
 import { getUserData } from "../api/user";
 import { auth, database } from "../config/firebase";
 
-import { AntDesign } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { singOut } from "../api/login";
 
 var unsubscribe;
@@ -15,7 +15,6 @@ export default function profileScreen({ user }) {
   const [posts, setPosts] = useState([]);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [userName, setUsername] = useState(false);
-
 
   useEffect(() => {
     let currentUser = auth.currentUser.uid;
@@ -85,27 +84,23 @@ export default function profileScreen({ user }) {
   return (
     <View style={styles.container}>
       <Text>{userName}</Text>
-      {isCurrentUser ?
-        (
-          <>
-            <AntDesign
-              name="back"
-              size={24}
-              color="#808080"
-              style={{ marginTop: 50 }}
-              onPress={() => {
-                unsubscribe()
-                auth.signOut()
-              }}
-            />
-            <Text style={styles.title}>Editar</Text>
-          </>
-        )
-        :
-        (
-          <Text style={styles.title}>Bater um papo</Text>
-        )
-      }
+      {isCurrentUser ? (
+        <>
+          <Ionicons
+            name="exit"
+            size={24}
+            color="#808080"
+            style={{ marginTop: 50 }}
+            onPress={() => {
+              unsubscribe();
+              auth.signOut();
+            }}
+          />
+          <Text style={styles.title}>Editar</Text>
+        </>
+      ) : (
+        <Text style={styles.title}>Bater um papo</Text>
+      )}
       <FlatList
         data={posts}
         renderItem={({ item }) => card(item)}
