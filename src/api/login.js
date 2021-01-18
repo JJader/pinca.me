@@ -1,8 +1,15 @@
-import { auth } from '../config/firebase'
+import { auth, database } from '../config/firebase'
 
-export async function registration({ email, password, name }) {
+export async function registration(email, password, data) {
   try {
     await auth.createUserWithEmailAndPassword(email, password);
+
+    database.collection("users").doc(auth.currentUser.uid).set({
+      email: email,
+      ...data
+    });
+
+    signIn({ email, password })
   }
   catch (err) {
     alert(err.message)
@@ -11,7 +18,7 @@ export async function registration({ email, password, name }) {
 
 export async function signIn({ email, password }) {
   try {
-   await auth.signInWithEmailAndPassword(email, password);
+    await auth.signInWithEmailAndPassword(email, password);
   }
   catch (err) {
     alert(err.message)
