@@ -9,16 +9,16 @@ import {
   ScrollView
 } from 'react-native'
 
-import { AntDesign } from '@expo/vector-icons';
 import { createPostData } from '../api/posts'
-import { auth } from '../config/firebase'
+import { pink, lightGrey } from '../styles/color'
+import DatePicker from '../components/calender/datePicker'
 
 export default function createPostScreen({ navigation: { navigate } }) {
 
   const [title, setTitle] = useState('')
   const [descrition, setDescrition] = useState('')
-  const [start, setStart] = useState('')
-  const [end, setEnd] = useState('')
+  const [start, setStart] = useState(Date.now())
+  const [end, setEnd] = useState(Date.now())
   const [category, setCategory] = useState('')
 
   function createPost() {
@@ -42,7 +42,8 @@ export default function createPostScreen({ navigation: { navigate } }) {
         setCategory('')
       }
     })
-  }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
       <StatusBar backgroundColor='black' />
@@ -63,20 +64,17 @@ export default function createPostScreen({ navigation: { navigate } }) {
           dataDetectorTypes='calendarEvent'
           multiline={true}
         />
-        <View style={styles.dataView}>
-          <TextInput
-            style={styles.dateInput}
-            placeholder='Start date'
-            value={start}
-            onChangeText={setStart}
-            dataDetectorTypes='calendarEvent'
-          />
 
-          <TextInput
-            style={styles.dateInput}
-            placeholder='End date'
-            value={end}
-            onChangeText={setEnd}
+        <View style={styles.dataView}>
+          <DatePicker
+            onChange={setStart}
+            text='Data de início'
+            styleText={styles.dateText}
+          />
+          <DatePicker
+            onChange={setEnd}
+            text='Data de conclusão'
+            styleText={styles.dateText}
           />
         </View>
 
@@ -92,7 +90,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
           style={styles.button}
           onPress={() => createPost()}
         >
-          <AntDesign name="pluscircle" size={60} color="#ff007f" />
+          <Text style={styles.text}>CRIAR PROJETO</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -120,7 +118,7 @@ const styles = StyleSheet.create({
 
   inputVertical: {
     padding: 10,
-    height: 70,
+    height: 50,
     borderColor: 'grey',
     borderWidth: 1,
     borderRadius: 10,
@@ -143,14 +141,23 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
 
-  dateInput: {
-    flex: 1
+  dateText: {
+    color: lightGrey,
+    marginBottom: 5
   },
 
+
   button: {
+    backgroundColor: pink,
     flex: 1,
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 5,
+    minHeight: 60
   },
+
+  text: {
+    color: 'white',
+  }
 })
