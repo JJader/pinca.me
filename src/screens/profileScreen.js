@@ -81,11 +81,14 @@ export default function profileScreen({ user, navigation }) {
   }
 
   function card(item) {
+    const start = new Date(item.start);
+    const end = new Date(item.end);
+
     return (
       <View style={styles.card}>
         <Text>{item.title}</Text>
-        <Text>{item.start}</Text>
-        <Text>{item.end}</Text>
+        <Text>{start.toLocaleDateString()}</Text>
+        <Text>{end.toLocaleDateString()}</Text>
         <Text>{item.descrition}</Text>
       </View>
     );
@@ -100,7 +103,7 @@ export default function profileScreen({ user, navigation }) {
         }}
       >
         {
-          isCurrentUser ? null : (
+          isCurrentUser ? (null) : (
             <AntDesign
               name="back"
               size={24}
@@ -112,7 +115,7 @@ export default function profileScreen({ user, navigation }) {
             />)
         }
         <View style={styles.profileTab}>
-          <Image style={styles.profilePic} source={defaultPic}></Image>
+          <Image style={styles.profilePic} source={defaultPic} />
           <View style={styles.profileInfo}>
             <Text style={styles.textName}>{userName}</Text>
             <Text style={styles.textUniversidade}>
@@ -120,8 +123,8 @@ export default function profileScreen({ user, navigation }) {
             </Text>
 
             <View>
-              {isCurrentUser ? (
-                <>
+              {isCurrentUser ?
+                (
                   <TouchableOpacity style={styles.buttonMessage}>
                     <Text
                       style={{
@@ -133,22 +136,22 @@ export default function profileScreen({ user, navigation }) {
                       EDITE SEU PERFIL
                     </Text>
                   </TouchableOpacity>
-                </>
-              ) : (
-                  <>
-                    <TouchableOpacity style={styles.buttonMessage}>
-                      <Text
-                        style={{
-                          fontSize: 14,
-                          color: "white",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        ENVIE UMA MENSSAGEM
+                )
+                :
+                (
+                  <TouchableOpacity style={styles.buttonMessage}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: "white",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      ENVIE UMA MENSSAGEM
                     </Text>
-                    </TouchableOpacity>
-                  </>
-                )}
+                  </TouchableOpacity>
+                )
+              }
             </View>
           </View>
         </View>
