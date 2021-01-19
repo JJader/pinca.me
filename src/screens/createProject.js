@@ -59,7 +59,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
       descrition,
       start,
       end,
-      category,
+      //category,
     }
 
     let snapshot = await createPostData(data)
@@ -68,12 +68,12 @@ export default function createPostScreen({ navigation: { navigate } }) {
       alert(snapshot.error.message)
     }
     else {
-      navigate('feed')
       setTitle('')
       setDescrition('')
       setStart('')
       setEnd('')
       setCategory('')
+      navigate('feed')
     }
   };
 
