@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+} from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
 import { getAllPosts } from "../api/posts";
@@ -7,11 +15,13 @@ import { getUserData } from "../api/user";
 import { auth, database } from "../config/firebase";
 
 import { Ionicons } from "@expo/vector-icons";
-import { singOut } from "../api/login";
+import { AntDesign } from "@expo/vector-icons";
+import defaultPic from "../assets/defaultPic.jpg";
+import { analytics } from "firebase";
 
 var unsubscribe;
 
-export default function profileScreen({ user }) {
+export default function profileScreen({ user, navigation }) {
   const [posts, setPosts] = useState([]);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [userName, setUsername] = useState(false);
@@ -82,61 +92,154 @@ export default function profileScreen({ user }) {
   }
 
   return (
-    <View style={styles.container}>
-      <Text>{userName}</Text>
-      {isCurrentUser ? (
-        <>
-          <Ionicons
-            name="exit"
-            size={24}
-            color="#808080"
-            style={{ marginTop: 50 }}
-            onPress={() => {
-              unsubscribe();
-              auth.signOut();
-            }}
-          />
-          <Text style={styles.title}>Editar</Text>
-        </>
-      ) : (
-          <>
-            <Ionicons
-              name="exit"
-              size={24}
-              color="#808080"
-              style={{ marginTop: 50 }}
-              onPress={() => {
-                user.close()
-              }}
-            />
-            <Text style={styles.title}>Bater um papo</Text>
-          </>
-        )
-      }
-      <FlatList
-        data={posts}
-        renderItem={({ item }) => card(item)}
-        key={({ item }) => item.id}
-      />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView
+        directionalLockEnabled="true"
+        contentContainerStyle={{
+          alignItems: "center",
+        }}
+      >
+        <AntDesign
+          name="back"
+          size={24}
+          color="#808080"
+          style={styles.backButton}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+        <View style={styles.profileTab}>
+          <Image style={styles.profilePic} source={defaultPic}></Image>
+          <View style={styles.profileInfo}>
+            <Text style={styles.textName}>{userName}</Text>
+            <Text style={styles.textUniversidade}>
+              Universidade Federel de Ouro Preto / MG
+            </Text>
+
+            <View>
+              {isCurrentUser ? (
+                <>
+                  <TouchableOpacity style={styles.buttonMessage}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: "white",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      EDITE SEU PERFIL
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <>
+                  <TouchableOpacity style={styles.buttonMessage}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: "white",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      ENVIE UMA MENSSAGEM
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
+          </View>
+        </View>
+        <View style={styles.descritionTab}>
+          <Text>Descrições de {userName} aqui</Text>
+        </View>
+
+        <Text style={{ marginTop: 10 }}>Áreas de interesse</Text>
+        <View style={styles.areaInteresse}>
+          <Text> Python Java Robótica</Text>
+        </View>
+      </ScrollView>
+      <View style={{ height: 250, width: "100%", alignItems: "center" }}>
+        <Text style={{ marginTop: 10 }}>Projetos realizados</Text>
+        <FlatList
+          data={posts}
+          renderItem={({ item }) => card(item)}
+          key={({ item }) => item.id}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginHorizontal: 10,
   },
-
   card: {
-    backgroundColor: "grey",
-    marginVertical: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 0,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    backgroundColor: "white",
+    marginVertical: 5,
     alignSelf: "center",
-    padding: 20,
+    padding: 5,
+    borderRadius: 5,
+    width: "100%",
   },
-
   title: {
     fontSize: 20,
     fontWeight: "bold",
+  },
+  profilePic: {
+    marginLeft: 15,
+    height: 140,
+    width: 140,
+    borderRadius: 70,
+  },
+  profileTab: {
+    flexDirection: "row",
+  },
+  textName: {
+    fontSize: 32,
+  },
+  textUniversidade: {
+    color: "#808080",
+    fontSize: 14,
+  },
+  buttonMessage: {
+    marginTop: 25,
+    backgroundColor: "#E0174A",
+    height: 30,
+    width: 200,
+    borderRadius: 8,
+    borderColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  profileInfo: {
+    width: "60%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  descritionTab: {
+    marginTop: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "95%",
+    height: 120,
+  },
+  areaInteresse: {
+    marginTop: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "95%",
+    height: 40,
+  },
+  backButton: {
+    marginTop: 15,
+    marginRight: 320,
   },
 });
