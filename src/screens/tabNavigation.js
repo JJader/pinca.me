@@ -8,6 +8,7 @@ import {
   SearchScreen,
   MakeProjectScreen,
   ProfileScreen,
+  ChatScreen
 } from "./index";
 
 const Tab = createBottomTabNavigator();
@@ -42,6 +43,16 @@ export default function App() {
           title: () => null,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="ios-add" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="chat"
+        component={ChatScreen}
+        options={{
+          title: () => null,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="ios-chatbubbles" size={size} color={color} />
           ),
         }}
       />
