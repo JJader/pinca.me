@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { FirstScreen, LoginScreen, SignUpScreen, RegisterStep2 } from "./index";
+import { FirstScreen, LoginScreen, SignUpScreen } from "./index";
 import TabNavigation from "./tabNavigation";
 import { auth } from "../config/firebase";
 
@@ -41,22 +41,7 @@ function App() {
               name="signUp"
               component={SignUpScreen}
               options={{
-                title: null,
-                headerStyle: {
-                  backgroundColor: null,
-                  elevation: 0,
-                },
-              }}
-            />
-            <Stack.Screen
-              name="signUpStep2"
-              component={RegisterStep2}
-              options={{
-                title: null,
-                headerStyle: {
-                  backgroundColor: null,
-                  elevation: 0,
-                },
+                headerShown: false,
               }}
             />
           </>

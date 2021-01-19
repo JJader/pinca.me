@@ -5,8 +5,7 @@ import MakeProjectScreen from "./createProject";
 import SearchScreen from "./searchScreen";
 import ProfileScreen from "./profileScreen";
 import FirstScreen from "./firstScreen";
-import RegisterStep2 from "./registerStep2";
-import ChatScreen from './chatScreen';
+import ChatScreen from "./chatScreen";
 
 export {
   LoginScreen,
@@ -16,6 +15,5 @@ export {
   SearchScreen,
   ProfileScreen,
   FirstScreen,
-  RegisterStep2,
   ChatScreen,
 };
