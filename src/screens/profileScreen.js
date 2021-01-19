@@ -99,15 +99,18 @@ export default function profileScreen({ user, navigation }) {
           alignItems: "center",
         }}
       >
-        <AntDesign
-          name="back"
-          size={24}
-          color="#808080"
-          style={styles.backButton}
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
+        {
+          isCurrentUser ? null : (
+            <AntDesign
+              name="back"
+              size={24}
+              color="#808080"
+              style={styles.backButton}
+              onPress={() => {
+                user.close()
+              }}
+            />)
+        }
         <View style={styles.profileTab}>
           <Image style={styles.profilePic} source={defaultPic}></Image>
           <View style={styles.profileInfo}>
@@ -132,20 +135,20 @@ export default function profileScreen({ user, navigation }) {
                   </TouchableOpacity>
                 </>
               ) : (
-                <>
-                  <TouchableOpacity style={styles.buttonMessage}>
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: "white",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      ENVIE UMA MENSSAGEM
+                  <>
+                    <TouchableOpacity style={styles.buttonMessage}>
+                      <Text
+                        style={{
+                          fontSize: 14,
+                          color: "white",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        ENVIE UMA MENSSAGEM
                     </Text>
-                  </TouchableOpacity>
-                </>
-              )}
+                    </TouchableOpacity>
+                  </>
+                )}
             </View>
           </View>
         </View>
