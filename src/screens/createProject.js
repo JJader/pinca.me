@@ -5,20 +5,53 @@ import {
   TextInput,
   Text,
   View,
-  ScrollView
+  ScrollView,
+  SafeAreaView
 } from 'react-native'
 
 import { createPostData } from '../api/posts'
 import { pink, lightGrey } from '../styles/color'
-import DatePicker from '../components/calender/datePicker'
+import DatePicker from '../components/list/datePicker'
 import LoadingButton from '../components/button/loadingButton'
+
+import SelectList from '../components/list/SelectList'
+
+const items = [{
+  id: '92iijs7yta',
+  name: 'Ondo'
+}, {
+  id: 'a0s0a8ssbsd',
+  name: 'Ogun'
+}, {
+  id: '16hbajsabsd',
+  name: 'Calabar'
+}, {
+  id: 'nahs75a5sg',
+  name: 'Lagos'
+}, {
+  id: '667atsas',
+  name: 'Maiduguri'
+}, {
+  id: 'hsyasajs',
+  name: 'Anambra'
+}, {
+  id: 'djsjudksjd',
+  name: 'Benue'
+}, {
+  id: 'sdhyaysdj',
+  name: 'Kaduna'
+}, {
+  id: 'suudydjsjd',
+  name: 'Abuja'
+}
+];
 
 export default function createPostScreen({ navigation: { navigate } }) {
   const [title, setTitle] = useState('')
   const [descrition, setDescrition] = useState('')
   const [start, setStart] = useState(Date.now())
   const [end, setEnd] = useState(Date.now())
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState([])
 
   async function createPost() {
     const data = {
@@ -45,7 +78,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollView}>
+    <ScrollView contentContainerStyle={styles.scrollView} >
       <StatusBar backgroundColor='black' />
       <View style={styles.contatiner}>
         <Text style={styles.title}>Create project</Text>
@@ -77,15 +110,14 @@ export default function createPostScreen({ navigation: { navigate } }) {
             styleText={styles.dateText}
           />
         </View>
-
-        <TextInput
-          style={styles.inputHorizontal}
-          placeholder='Categorias'
-          value={category}
-          onChangeText={setCategory}
-          multiline={true}
+        <SelectList
+          style={styles.selectList}
+          text='Categorias'
+          inputText='Procurar'
+          data={items}
+          onItemsChange={setCategory}
+          buttonColor={pink}
         />
-
         <LoadingButton
           text={'CRIAR PROJETO'}
           styleButton={styles.button}
@@ -101,6 +133,7 @@ const styles = StyleSheet.create({
   scrollView: {
     alignItems: 'center',
     width: '100%',
+    backgroundColor: 'white'
   },
 
   contatiner: {
@@ -157,5 +190,11 @@ const styles = StyleSheet.create({
 
   text: {
     color: 'white',
-  }
+  },
+
+  selectList: {
+    flex: 1,
+    height: '100%',
+    marginBottom: 20,
+  },
 })
