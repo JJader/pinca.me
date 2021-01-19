@@ -19,6 +19,11 @@ export default function SelectList({
     setSelectedItems(selectedItems);
     onItemsChange(selectedItems);
   };
+
+  const clearSelected = () => {
+    multiSelect._removeAllItems();
+  };
+
   return (
     <View style={[{ flex: 1 }, style]}>
       <MultiSelect

@@ -15,7 +15,10 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <Tab.Navigator initialRouteName="create">
+    <Tab.Navigator
+      initialRouteName="create"
+      sceneContainerStyle={{ backgroundColor: 'white' }}
+    >
       <Tab.Screen
         name="feed"
         component={FeedScreen}

@@ -11,6 +11,10 @@ import {
 
 import { searchByName } from "../api/user";
 import ProfileScreen from "./profileScreen";
+
+import { defaultStyle } from '../styles/index'
+import { lightGrey } from '../styles/color'
+
 export default function search() {
   const [users, setUsers] = useState([]);
   const [userFound, setUserFound] = useState("");
@@ -68,10 +72,10 @@ export default function search() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Search</Text>
+    <View style={defaultStyle.container}>
+      <Text style={defaultStyle.title}>Search</Text>
       <TextInput
-        style={styles.input}
+        style={defaultStyle.input}
         onChangeText={searchUser}
         placeholder="Search"
       />
@@ -87,29 +91,11 @@ export default function search() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 20,
-    marginHorizontal: 20,
-  },
-
-  title: {
-    fontSize: 35,
-  },
-
-  input: {
-    padding: 10,
-    maxHeight: 75,
-    borderColor: "grey",
-    borderWidth: 1,
-    borderRadius: 10,
-    marginVertical: 20,
-  },
-
   buttonItem: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
+    marginVertical: 10,
   },
 
   name: {
@@ -118,6 +104,6 @@ const styles = StyleSheet.create({
   },
 
   email: {
-    color: "#bbbbbb",
+    color: lightGrey,
   },
 });

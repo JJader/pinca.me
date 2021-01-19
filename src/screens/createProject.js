@@ -6,51 +6,38 @@ import {
   Text,
   View,
   ScrollView,
-  SafeAreaView
 } from 'react-native'
 
 import { createPostData } from '../api/posts'
 import { pink, lightGrey } from '../styles/color'
+import { defaultStyle } from '../styles/index'
+
 import DatePicker from '../components/list/datePicker'
 import LoadingButton from '../components/button/loadingButton'
-
 import SelectList from '../components/list/SelectList'
 
 const items = [{
-  id: '92iijs7yta',
-  name: 'Ondo'
+  id: '1',
+  name: 'Engenharia de computação'
 }, {
-  id: 'a0s0a8ssbsd',
-  name: 'Ogun'
+  id: '2',
+  name: 'Engenharia de produção'
 }, {
-  id: '16hbajsabsd',
-  name: 'Calabar'
+  id: '3',
+  name: 'Engenharia elétrica'
 }, {
-  id: 'nahs75a5sg',
-  name: 'Lagos'
-}, {
-  id: '667atsas',
-  name: 'Maiduguri'
-}, {
-  id: 'hsyasajs',
-  name: 'Anambra'
-}, {
-  id: 'djsjudksjd',
-  name: 'Benue'
-}, {
-  id: 'sdhyaysdj',
-  name: 'Kaduna'
-}, {
-  id: 'suudydjsjd',
-  name: 'Abuja'
+  id: '4',
+  name: 'Sistema de informação'
 }
 ];
+
+const now = new Date(Date.now())
 
 export default function createPostScreen({ navigation: { navigate } }) {
   const [title, setTitle] = useState('')
   const [descrition, setDescrition] = useState('')
-  const [start, setStart] = useState(Date.now())
-  const [end, setEnd] = useState(Date.now())
+  const [start, setStart] = useState(now)
+  const [end, setEnd] = useState(now)
   const [category, setCategory] = useState([])
 
   async function createPost() {
@@ -59,7 +46,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
       descrition,
       start,
       end,
-      //category,
+      category,
     }
 
     let snapshot = await createPostData(data)
@@ -80,17 +67,17 @@ export default function createPostScreen({ navigation: { navigate } }) {
   return (
     <ScrollView contentContainerStyle={styles.scrollView} >
       <StatusBar backgroundColor='black' />
-      <View style={styles.contatiner}>
-        <Text style={styles.title}>Create project</Text>
+      <View style={defaultStyle.container}>
+        <Text style={defaultStyle.title}>Create project</Text>
 
         <TextInput
-          style={styles.inputVertical}
+          style={defaultStyle.input}
           placeholder='Título do Projeto'
           value={title}
           onChangeText={setTitle}
         />
         <TextInput
-          style={styles.inputHorizontal}
+          style={defaultStyle.inputHorizontal}
           placeholder='Descrição'
           value={descrition}
           onChangeText={setDescrition}
@@ -110,6 +97,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
             styleText={styles.dateText}
           />
         </View>
+
         <SelectList
           style={styles.selectList}
           text='Categorias'
@@ -118,10 +106,11 @@ export default function createPostScreen({ navigation: { navigate } }) {
           onItemsChange={setCategory}
           buttonColor={pink}
         />
+
         <LoadingButton
           text={'CRIAR PROJETO'}
-          styleButton={styles.button}
-          styleText={styles.text}
+          styleButton={defaultStyle.button}
+          styleText={{color:'white'}}
           onPress={() => createPost().then()}
         />
       </View>
@@ -136,60 +125,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
 
-  contatiner: {
-    flex: 1,
-    width: '90%'
-  },
-
-  title: {
-    fontSize: 35,
-    fontWeight: 'bold',
-    flex: 1,
-    marginBottom: 30
-  },
-
-  inputVertical: {
-    padding: 10,
-    height: 50,
-    borderColor: 'grey',
-    borderWidth: 1,
-    borderRadius: 10,
-    marginBottom: 20
-  },
-
-  inputHorizontal: {
-    padding: 10,
-    height: 140,
-    borderColor: 'grey',
-    borderWidth: 1,
-    borderRadius: 10,
-    marginBottom: 20
-  },
-
   dataView: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 20
+    marginVertical: 20
   },
 
   dateText: {
     color: lightGrey,
     marginBottom: 5
-  },
-
-  button: {
-    backgroundColor: pink,
-    flex: 1,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-    minHeight: 60
-  },
-
-  text: {
-    color: 'white',
   },
 
   selectList: {
