@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import {
   StatusBar,
   StyleSheet,
-  TouchableOpacity,
   TextInput,
   Text,
   View,
@@ -12,16 +11,16 @@ import {
 import { createPostData } from '../api/posts'
 import { pink, lightGrey } from '../styles/color'
 import DatePicker from '../components/calender/datePicker'
+import LoadingButton from '../components/button/loadingButton'
 
 export default function createPostScreen({ navigation: { navigate } }) {
-
   const [title, setTitle] = useState('')
   const [descrition, setDescrition] = useState('')
   const [start, setStart] = useState(Date.now())
   const [end, setEnd] = useState(Date.now())
   const [category, setCategory] = useState('')
 
-  function createPost() {
+  async function createPost() {
     const data = {
       title,
       descrition,
@@ -29,19 +28,20 @@ export default function createPostScreen({ navigation: { navigate } }) {
       end,
       category,
     }
-    createPostData(data).then((snapshot) => {
-      if (snapshot.error) {
-        alert(snapshot.error.message)
-      }
-      else {
-        navigate('feed')
-        setTitle('')
-        setDescrition('')
-        setStart('')
-        setEnd('')
-        setCategory('')
-      }
-    })
+
+    let snapshot = await createPostData(data)
+
+    if (snapshot.error) {
+      alert(snapshot.error.message)
+    }
+    else {
+      navigate('feed')
+      setTitle('')
+      setDescrition('')
+      setStart('')
+      setEnd('')
+      setCategory('')
+    }
   };
 
   return (
@@ -52,13 +52,13 @@ export default function createPostScreen({ navigation: { navigate } }) {
 
         <TextInput
           style={styles.inputVertical}
-          placeholder='Title'
+          placeholder='Título do Projeto'
           value={title}
           onChangeText={setTitle}
         />
         <TextInput
           style={styles.inputHorizontal}
-          placeholder='Descrition'
+          placeholder='Descrição'
           value={descrition}
           onChangeText={setDescrition}
           dataDetectorTypes='calendarEvent'
@@ -80,21 +80,20 @@ export default function createPostScreen({ navigation: { navigate } }) {
 
         <TextInput
           style={styles.inputHorizontal}
-          placeholder='Category'
+          placeholder='Categorias'
           value={category}
           onChangeText={setCategory}
           multiline={true}
         />
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => createPost()}
-        >
-          <Text style={styles.text}>CRIAR PROJETO</Text>
-        </TouchableOpacity>
+        <LoadingButton
+          text={'CRIAR PROJETO'}
+          styleButton={styles.button}
+          styleText={styles.text}
+          onPress={() => createPost().then()}
+        />
       </View>
     </ScrollView>
-
   )
 }
 
@@ -145,7 +144,6 @@ const styles = StyleSheet.create({
     color: lightGrey,
     marginBottom: 5
   },
-
 
   button: {
     backgroundColor: pink,
