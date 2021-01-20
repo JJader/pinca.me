@@ -14,7 +14,7 @@ import { defaultStyle } from '../styles/index'
 
 import DatePicker from '../components/list/datePicker'
 import LoadingButton from '../components/button/loadingButton'
-import SelectList from '../components/list/SelectList'
+import SelectList from '../components/list/selectList'
 
 const items = [{
   id: '1',
