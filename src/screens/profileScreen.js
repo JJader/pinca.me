@@ -17,7 +17,6 @@ import { auth, database } from "../config/firebase";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import defaultPic from "../assets/defaultPic.jpg";
-import { analytics } from "firebase";
 
 var unsubscribe;
 
@@ -49,7 +48,6 @@ export default function profileScreen({ user, navigation }) {
       });
 
       setPosts(posts);
-      console.log(posts);
     });
   }
 
@@ -102,18 +100,17 @@ export default function profileScreen({ user, navigation }) {
           alignItems: "center",
         }}
       >
-        {
-          isCurrentUser ? (null) : (
-            <AntDesign
-              name="back"
-              size={24}
-              color="#808080"
-              style={styles.backButton}
-              onPress={() => {
-                user.close()
-              }}
-            />)
-        }
+        {isCurrentUser ? null : (
+          <AntDesign
+            name="back"
+            size={24}
+            color="#808080"
+            style={styles.backButton}
+            onPress={() => {
+              user.close();
+            }}
+          />
+        )}
         <View style={styles.profileTab}>
           <Image style={styles.profilePic} source={defaultPic} />
           <View style={styles.profileInfo}>
@@ -123,35 +120,39 @@ export default function profileScreen({ user, navigation }) {
             </Text>
 
             <View>
-              {isCurrentUser ?
-                (
-                  <TouchableOpacity style={styles.buttonMessage}>
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: "white",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      EDITE SEU PERFIL
-                    </Text>
-                  </TouchableOpacity>
-                )
-                :
-                (
-                  <TouchableOpacity style={styles.buttonMessage}>
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: "white",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      ENVIE UMA MENSSAGEM
-                    </Text>
-                  </TouchableOpacity>
-                )
-              }
+              {isCurrentUser ? (
+                <TouchableOpacity
+                  style={styles.buttonMessage}
+                  onPress={() => alert("Voce sera encaminhado para edicao")}
+                >
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: "white",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    EDITE SEU PERFIL
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={styles.buttonMessage}
+                  onPress={() => {
+                    user.talk();
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: "white",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    ENVIE UMA MENSSAGEM
+                  </Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>
@@ -164,8 +165,10 @@ export default function profileScreen({ user, navigation }) {
           <Text> Python Java Robótica</Text>
         </View>
       </ScrollView>
-      <View style={{ height: 250, width: "100%", alignItems: "center" }}>
-        <Text style={{ marginTop: 10 }}>Projetos realizados</Text>
+      <View style={{ height: 200, width: "100%", alignItems: "center" }}>
+        <Text style={{ marginTop: 10, marginBottom: 10 }}>
+          Projetos realizados
+        </Text>
         <FlatList
           data={posts}
           renderItem={({ item }) => card(item)}
@@ -206,6 +209,8 @@ const styles = StyleSheet.create({
     borderRadius: 70,
   },
   profileTab: {
+    position: "absolute",
+    top: 50,
     flexDirection: "row",
   },
   textName: {
@@ -231,7 +236,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   descritionTab: {
-    marginTop: 15,
+    backgroundColor: "#DCDCDC",
+    marginTop: 200,
     justifyContent: "center",
     alignItems: "center",
     width: "95%",
@@ -239,6 +245,7 @@ const styles = StyleSheet.create({
   },
   areaInteresse: {
     marginTop: 15,
+    backgroundColor: "#DCDCDC",
     justifyContent: "center",
     alignItems: "center",
     width: "95%",
