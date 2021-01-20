@@ -15,7 +15,7 @@ import ProfileScreen from "./profileScreen";
 import { defaultStyle } from '../styles/index'
 import { lightGrey } from '../styles/color'
 
-export default function search() {
+export default function search({ navigation }) {
   const [users, setUsers] = useState([]);
   const [userFound, setUserFound] = useState("");
   const [isFind, setIsFind] = useState(false);
@@ -28,8 +28,9 @@ export default function search() {
         let users = snapshot.docs.map((doc) => {
           const data = doc.data()
           const id = doc.id
-          const close = () => { return setIsFind(false) }
-          return { id, close, ...data }
+          const close = () => { return closeModal() }
+          const talk = () => { return talkWithMe() }
+          return { id, talk, close, ...data }
         })
         setUsers(users)
       })
@@ -42,11 +43,15 @@ export default function search() {
         animationType="slide"
         transparent={false}
         visible={isFind}
-        onRequestClose={() => closeModal()}
       >
         <ProfileScreen user={userFound} />
       </Modal>
     );
+  }
+
+  function talkWithMe() {
+    navigation.navigate('chat')
+    closeModal()
   }
 
   function closeModal() {
