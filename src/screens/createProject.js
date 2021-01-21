@@ -15,6 +15,7 @@ import { defaultStyle } from '../styles/index'
 import DatePicker from '../components/list/datePicker'
 import LoadingButton from '../components/button/loadingButton'
 import SelectList from '../components/list/selectList'
+import PickerList from '../components/list/pickerList'
 
 const items = [{
   id: '1',
@@ -76,6 +77,11 @@ export default function createPostScreen({ navigation: { navigate } }) {
           value={title}
           onChangeText={setTitle}
         />
+        <PickerList
+          data={items}
+          text={'Tipo'}
+        />
+
         <TextInput
           style={defaultStyle.inputHorizontal}
           placeholder='Descrição'
@@ -110,7 +116,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
         <LoadingButton
           text={'CRIAR PROJETO'}
           styleButton={defaultStyle.button}
-          styleText={{color:'white'}}
+          styleText={{ color: 'white' }}
           onPress={() => createPost().then()}
         />
       </View>
