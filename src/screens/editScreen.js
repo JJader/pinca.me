@@ -1,34 +1,77 @@
 import React, { useState } from "react";
 import {
-  View,
-  Text,
+  StatusBar,
   StyleSheet,
   TextInput,
+  Text,
+  View,
+  ScrollView,
+  Image,
   TouchableOpacity,
 } from "react-native";
 
-import { registration } from "../api/login";
 import { AntDesign } from "@expo/vector-icons";
+import defaultPic from "../assets/defaultPic.jpg";
+import SelectList from "../components/list/selectList";
+import { auth } from "../config/firebase";
+import { updateUser } from "../api/user";
 
-export default function signUpScreen({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [nickname, setNickName] = useState("");
-  const [curso, setCurso] = useState("");
-  const [insituicao, setInstituicao] = useState("");
-  const [interesse, setIntresse] = useState("");
+const items = [
+  {
+    id: "1",
+    name: "Engenharia de computação",
+  },
+  {
+    id: "2",
+    name: "Engenharia de produção",
+  },
+  {
+    id: "3",
+    name: "Engenharia elétrica",
+  },
+  {
+    id: "4",
+    name: "Sistema de informação",
+  },
+];
+
+export default function editScreen({ navigation }) {
+  const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
+  const [course, setCourse] = useState("");
+  const [university, setUniversity] = useState("");
+  const [category, setCategory] = useState([]);
   const [picture, setPicture] = useState("");
 
-  function trySignUp() {
+  async function salvarDados() {
     const data = {
-      name: nickname,
+      name,
+      bio,
+      course,
+      university,
+      category,
+      picture,
     };
 
-    registration(email, password, data).then();
+    const id = auth.currentUser.uid;
+
+    let snapshot = await updateUser(id, data);
+
+    if (snapshot.error) {
+      alert(snapshot.error.message);
+    } else {
+      setName("");
+      setBio("");
+      setCourse("");
+      setUniversity("");
+      setCategory([]);
+      setPicture("");
+    }
   }
 
   return (
-    <View style={styles.containter}>
+    <ScrollView contentContainerStyle={styles.scrollView}>
+      <StatusBar backgroundColor="black" />
       <AntDesign
         name="back"
         size={24}
@@ -37,29 +80,51 @@ export default function signUpScreen({ navigation }) {
         onPress={() => navigation.goBack()}
       />
       <Text style={styles.text}>Editar perfil</Text>
+      <View style={{ alignItems: "center" }}>
+        <TouchableOpacity onPress={() => alert("Trocar Foto!")}>
+          <Image style={styles.profilePic} source={defaultPic} />
+        </TouchableOpacity>
+      </View>
       <View style={styles.inputForm}>
         <TextInput
           style={styles.input}
-          placeholder="Apelido"
-          value={nickname}
-          onChangeText={setNickName}
+          placeholder="Nome"
+          value={name}
+          onChangeText={setName}
+        ></TextInput>
+        <TextInput
+          style={styles.inputBio}
+          placeholder="Fale sobre você"
+          value={bio}
+          onChangeText={setBio}
         ></TextInput>
         <TextInput
           style={styles.input}
           placeholder="Curso"
-          value={curso}
-          onChangeText={setCurso}
+          value={course}
+          onChangeText={setCourse}
         ></TextInput>
         <TextInput
           style={styles.input}
           placeholder="Instituição"
-          value={insituicao}
-          onChangeText={setInstituicao}
+          value={university}
+          onChangeText={setUniversity}
         ></TextInput>
+
+        <SelectList
+          style={styles.selectList}
+          text="Area de category"
+          inputText="Procurar"
+          data={items}
+          onItemsChange={setCategory}
+          buttonColor="black"
+        />
+
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            trySignUp();
+            salvarDados().then();
+            navigation.goBack();
           }}
         >
           <Text style={{ fontSize: 15, color: "white", fontWeight: "bold" }}>
@@ -67,7 +132,7 @@ export default function signUpScreen({ navigation }) {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -76,13 +141,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
+  scrollView: {
+    backgroundColor: "white",
+  },
   text: {
     marginLeft: 20,
     marginTop: 32,
     fontSize: 50,
   },
   inputForm: {
-    marginTop: 32,
     alignItems: "center",
     justifyContent: "space-between",
   },
@@ -93,6 +160,15 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 2,
     minHeight: 50,
+    paddingLeft: 10,
+  },
+  inputBio: {
+    marginTop: 20,
+    width: "90%",
+    backgroundColor: "#FFF",
+    borderColor: "black",
+    borderWidth: 2,
+    minHeight: 200,
     paddingLeft: 10,
   },
   button: {
@@ -108,5 +184,24 @@ const styles = StyleSheet.create({
   backButton: {
     marginLeft: 15,
     marginTop: 32,
+  },
+  profilePic: {
+    marginLeft: 15,
+    height: 140,
+    width: 140,
+    borderRadius: 70,
+  },
+  profilePic: {
+    marginTop: 15,
+    height: 140,
+    width: 140,
+    borderRadius: 70,
+  },
+  selectList: {
+    marginBottom: 50,
+    marginTop: 20,
+    paddingLeft: 5,
+    height: "100%",
+    width: "90%",
   },
 });

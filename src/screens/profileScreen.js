@@ -16,14 +16,16 @@ import { auth, database } from "../config/firebase";
 
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { singOut } from "../api/login";
+
 import defaultPic from "../assets/defaultPic.jpg";
 
-var unsubscribe;
+var unsubscribe, unsubscribeUser;
 
 export default function profileScreen({ user, navigation }) {
   const [posts, setPosts] = useState([]);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
-  const [userName, setUsername] = useState(false);
+  const [userData, setUserData] = useState("");
 
   useEffect(() => {
     let currentUser = auth.currentUser.uid;
@@ -73,9 +75,19 @@ export default function profileScreen({ user, navigation }) {
 
   function getUser(id) {
     getUserData(id).then((snapshot) => {
-      const name = snapshot.data().name;
-      setUsername(name);
+      const userData = snapshot.data();
+      setUserData(userData);
     });
+  }
+
+  function getCurrentUser(id) {
+    // Depois penso em uma forma mais eficiente de fazer isso
+    unsubscribeUser = database
+      .collection("users")
+      .doc(id)
+      .onSnapshot((query) => {
+        setUserData(query.data());
+      });
   }
 
   function card(item) {
@@ -114,10 +126,19 @@ export default function profileScreen({ user, navigation }) {
         <View style={styles.profileTab}>
           <Image style={styles.profilePic} source={defaultPic} />
           <View style={styles.profileInfo}>
-            <Text style={styles.textName}>{userName}</Text>
-            <Text style={styles.textUniversidade}>
-              Universidade Federel de Ouro Preto / MG
-            </Text>
+            <View style={{ alignItems: "center", flexDirection: "row" }}>
+              <Text style={styles.textName}>{userData.name}</Text>
+              <Ionicons
+                name="exit"
+                size={24}
+                color="#808080"
+                onPress={() => {
+                  unsubscribe();
+                  singOut();
+                }}
+              />
+            </View>
+            <Text style={styles.textUniversidade}>{userData.university}</Text>
 
             <View>
               {isCurrentUser ? (
@@ -157,7 +178,7 @@ export default function profileScreen({ user, navigation }) {
           </View>
         </View>
         <View style={styles.descritionTab}>
-          <Text>Descrições de {userName} aqui</Text>
+          <Text>{userData.bio}</Text>
         </View>
 
         <Text style={{ marginTop: 10 }}>Áreas de interesse</Text>
@@ -215,6 +236,7 @@ const styles = StyleSheet.create({
   },
   textName: {
     fontSize: 32,
+    marginRight: 10,
   },
   textUniversidade: {
     color: "#808080",
