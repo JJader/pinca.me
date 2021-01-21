@@ -6,6 +6,7 @@ import SearchScreen from "./searchScreen";
 import ProfileScreen from "./profileScreen";
 import FirstScreen from "./firstScreen";
 import ChatScreen from "./chatScreen";
+import EditScreen from "./editScreen";
 
 export {
   LoginScreen,
@@ -16,4 +17,5 @@ export {
   ProfileScreen,
   FirstScreen,
   ChatScreen,
+  EditScreen,
 };

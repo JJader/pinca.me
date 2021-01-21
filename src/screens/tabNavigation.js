@@ -8,7 +8,8 @@ import {
   SearchScreen,
   MakeProjectScreen,
   ProfileScreen,
-  ChatScreen
+  ChatScreen,
+  EditScreen,
 } from "./index";
 
 const Tab = createBottomTabNavigator();
@@ -17,7 +18,7 @@ export default function App() {
   return (
     <Tab.Navigator
       initialRouteName="create"
-      sceneContainerStyle={{ backgroundColor: 'white' }}
+      sceneContainerStyle={{ backgroundColor: "white" }}
     >
       <Tab.Screen
         name="feed"
@@ -69,6 +70,7 @@ export default function App() {
           ),
         }}
       />
+      <Tab.Screen name="edit" component={EditScreen} />
     </Tab.Navigator>
   );
 }
