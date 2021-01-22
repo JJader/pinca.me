@@ -9,7 +9,6 @@ import {
   MakeProjectScreen,
   ProfileScreen,
   ChatScreen,
-  EditScreen,
 } from "./index";
 
 const Tab = createBottomTabNavigator();
@@ -70,7 +69,6 @@ export default function App() {
           ),
         }}
       />
-      <Tab.Screen name="edit" component={EditScreen} />
     </Tab.Navigator>
   );
 }

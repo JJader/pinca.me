@@ -15,6 +15,7 @@ import defaultPic from "../assets/defaultPic.jpg";
 import SelectList from "../components/list/selectList";
 import { auth } from "../config/firebase";
 import { updateUser } from "../api/user";
+import { abs } from "react-native-reanimated";
 
 const items = [
   {
@@ -81,10 +82,15 @@ export default function editScreen({ navigation }) {
       />
       <Text style={styles.text}>Editar perfil</Text>
       <View style={{ alignItems: "center" }}>
-        <TouchableOpacity onPress={() => alert("Trocar Foto!")}>
+        <TouchableOpacity
+          style={{ alignItems: "center" }}
+          onPress={() => alert("Trocar Foto!")}
+        >
           <Image style={styles.profilePic} source={defaultPic} />
+          <Text style={{ marginTop: 5, color: "blue" }}>Alterar imagem</Text>
         </TouchableOpacity>
       </View>
+
       <View style={styles.inputForm}>
         <TextInput
           style={styles.input}
@@ -97,6 +103,7 @@ export default function editScreen({ navigation }) {
           placeholder="Fale sobre você"
           value={bio}
           onChangeText={setBio}
+          multiline={true}
         ></TextInput>
         <TextInput
           style={styles.input}
@@ -146,7 +153,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginLeft: 20,
-    marginTop: 32,
+    marginTop: 15,
     fontSize: 50,
   },
   inputForm: {
@@ -172,7 +179,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   button: {
-    marginTop: 20,
+    marginBottom: 20,
     backgroundColor: "#E0174A",
     height: 52,
     width: "90%",
@@ -186,16 +193,11 @@ const styles = StyleSheet.create({
     marginTop: 32,
   },
   profilePic: {
-    marginLeft: 15,
-    height: 140,
-    width: 140,
-    borderRadius: 70,
-  },
-  profilePic: {
     marginTop: 15,
     height: 140,
     width: 140,
     borderRadius: 70,
+    opacity: 0.45,
   },
   selectList: {
     marginBottom: 50,

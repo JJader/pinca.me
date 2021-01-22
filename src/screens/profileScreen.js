@@ -37,6 +37,7 @@ export default function profileScreen({ user, navigation }) {
     } else {
       setIsCurrentUser(true);
       getCurrentPosts(currentUser);
+      getCurrentUser(currentUser);
       getUser(currentUser);
     }
   }, []);
@@ -96,10 +97,25 @@ export default function profileScreen({ user, navigation }) {
 
     return (
       <View style={styles.card}>
-        <Text>{item.title}</Text>
-        <Text>{start.toLocaleDateString()}</Text>
-        <Text>{end.toLocaleDateString()}</Text>
-        <Text>{item.descrition}</Text>
+        <Text style={{ fontWeight: "bold" }}>{item.title}</Text>
+        <Text style={{ color: "gray" }}>{item.descrition}</Text>
+        <View style={{ flexDirection: "row" }}>
+          <Image style={styles.cardPic} source={defaultPic} />
+          <View style={{ marginTop: 8, alignItems: "center" }}>
+            <Text style={{ fontWeight: "bold" }}>Author</Text>
+            <Text style={{ color: "gray", fontSize: 13 }}>@author</Text>
+          </View>
+        </View>
+        {/* <Text>Inicio: {start.toLocaleDateString()}</Text>
+        <Text>Conclusão: {end.toLocaleDateString()}</Text> */}
+      </View>
+    );
+  }
+
+  function renderCategory(item) {
+    return (
+      <View style={styles.card2}>
+        <Text>{item}</Text>
       </View>
     );
   }
@@ -128,23 +144,28 @@ export default function profileScreen({ user, navigation }) {
           <View style={styles.profileInfo}>
             <View style={{ alignItems: "center", flexDirection: "row" }}>
               <Text style={styles.textName}>{userData.name}</Text>
-              <Ionicons
-                name="exit"
-                size={24}
-                color="#808080"
-                onPress={() => {
-                  unsubscribe();
-                  singOut();
-                }}
-              />
+              {isCurrentUser ? (
+                <Ionicons
+                  name="exit"
+                  size={24}
+                  color="#808080"
+                  onPress={() => {
+                    unsubscribe();
+                    unsubscribeUser();
+                    singOut();
+                  }}
+                />
+              ) : null}
             </View>
+
+            <Text style={styles.textCourse}>{userData.course}</Text>
             <Text style={styles.textUniversidade}>{userData.university}</Text>
 
             <View>
               {isCurrentUser ? (
                 <TouchableOpacity
                   style={styles.buttonMessage}
-                  onPress={() => alert("Voce sera encaminhado para edicao")}
+                  onPress={() => navigation.navigate("edit")}
                 >
                   <Text
                     style={{
@@ -177,16 +198,28 @@ export default function profileScreen({ user, navigation }) {
             </View>
           </View>
         </View>
-        <View style={styles.descritionTab}>
+        <View style={styles.descriptionTab}>
           <Text>{userData.bio}</Text>
         </View>
-
-        <Text style={{ marginTop: 10 }}>Áreas de interesse</Text>
-        <View style={styles.areaInteresse}>
-          <Text> Python Java Robótica</Text>
-        </View>
       </ScrollView>
-      <View style={{ height: 200, width: "100%", alignItems: "center" }}>
+
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text style={{ marginTop: 5, marginBottom: 5 }}>
+          Áreas de interesse
+        </Text>
+        <FlatList
+          horizontal={true}
+          data={userData.category}
+          renderItem={({ item }) => renderCategory(item)}
+        />
+      </View>
+
+      <View style={{ width: "100%", alignItems: "center" }}>
         <Text style={{ marginTop: 10, marginBottom: 10 }}>
           Projetos realizados
         </Text>
@@ -201,23 +234,34 @@ export default function profileScreen({ user, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: {},
   card: {
-    shadowColor: "#000",
+    shadowColor: "gray",
     shadowOffset: {
-      width: 2,
-      height: 0,
+      width: 1,
+      height: 1,
     },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.9,
     shadowRadius: 3,
     backgroundColor: "white",
     marginVertical: 5,
     alignSelf: "center",
     padding: 5,
-    borderRadius: 5,
     width: "100%",
+  },
+  cardPic: {
+    marginTop: 5,
+    marginRight: 5,
+    height: 40,
+    width: 40,
+    borderRadius: 20,
+  },
+  card2: {
+    backgroundColor: "#C4C4C4",
+    marginLeft: 8,
+    alignSelf: "center",
+    padding: 7,
+    borderRadius: 5,
   },
   title: {
     fontSize: 20,
@@ -242,8 +286,14 @@ const styles = StyleSheet.create({
     color: "#808080",
     fontSize: 14,
   },
+  textCourse: {
+    marginTop: 5,
+    marginBottom: 5,
+    color: "black",
+    fontSize: 14,
+  },
   buttonMessage: {
-    marginTop: 25,
+    marginTop: 8,
     backgroundColor: "#E0174A",
     height: 30,
     width: 200,
@@ -257,21 +307,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  descritionTab: {
-    backgroundColor: "#DCDCDC",
+  descriptionTab: {
+    backgroundColor: "#FAF6F6",
     marginTop: 200,
     justifyContent: "center",
     alignItems: "center",
     width: "95%",
     height: 120,
-  },
-  areaInteresse: {
-    marginTop: 15,
-    backgroundColor: "#DCDCDC",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "95%",
-    height: 40,
   },
   backButton: {
     marginTop: 15,
