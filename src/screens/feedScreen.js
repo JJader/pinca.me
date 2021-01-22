@@ -7,6 +7,7 @@ import { getFeedPosts } from '../api/posts'
 
 import { pink, lightGrey } from '../styles/color'
 import { defaultStyle } from '../styles/index'
+import Card from '../components/card/card'
 
 
 export default function feedScreen() {
@@ -22,6 +23,7 @@ export default function feedScreen() {
         return { id, ...data };
       });
       setUniversityPosts(posts);
+      setPersonalPosts(posts)
     })
   }, [])
 
@@ -34,6 +36,7 @@ export default function feedScreen() {
         <Text style={styles.text}>PROJETOS EM DESTAQUE</Text>
 
         <FlatList
+          style={{ marginBottom: 70 }}
           data={universityPosts}
           key={({ item }) => item.id}
           renderItem={({ item }) => (
@@ -46,6 +49,16 @@ export default function feedScreen() {
           )}
           horizontal={true}
         />
+
+
+            
+        {personalPost.map((item) => (
+          <Card
+            item={item}
+            onUserPress={(user) => (alert(user.name))}
+            onPostPress={(post) => (alert(post.title))}
+          />
+        ))}
       </View>
     </ScrollView>
   )

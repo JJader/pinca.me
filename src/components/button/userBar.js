@@ -5,7 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 export default function userBar({
   name,
   image,
-  style,
+  style={height:40},
   styleText,
   onPress = () => { }
 }) {
