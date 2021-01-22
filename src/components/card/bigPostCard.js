@@ -26,7 +26,7 @@ export default function bigCard({
   const [userData, setUserData] = useState({ name: '' })
 
   useEffect(() => {
-    getUserData(item.userId).then((snapshot) => {
+    getUserData(item.creator).then((snapshot) => {
       const data = snapshot.data();
       setUserData(data);
     })
@@ -54,7 +54,7 @@ export default function bigCard({
             style={styles.text}
             numberOfLines={5}
           >
-            {item.descrition}
+            {item.description}
           </Text>
         </View>
       </TouchableOpacity>

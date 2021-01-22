@@ -17,7 +17,7 @@ export default function card({
   const [userData, setUserData] = useState({ name: '' })
 
   useEffect(() => {
-    getUserData(item.userId).then((snapshot) => {
+    getUserData(item.creator).then((snapshot) => {
       const data = snapshot.data();
       setUserData(data);
     })
@@ -29,7 +29,7 @@ export default function card({
       <TouchableOpacity>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.text} numberOfLines={3} >
-          {item.descrition}
+          {item.description}
         </Text>
       </TouchableOpacity>
 

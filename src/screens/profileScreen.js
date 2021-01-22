@@ -47,9 +47,8 @@ export default function profileScreen({ user, navigation }) {
     getUserPosts(id).then((snapshot) => {
       let posts = snapshot.docs.map((doc) => {
         const data = doc.data();
-        const postId = doc.id;
-        const userId = id;
-        return { postId, userId, ...data };
+        const id = doc.id;
+        return { id, ...data };
       });
       setPosts(posts);
     });
@@ -59,8 +58,6 @@ export default function profileScreen({ user, navigation }) {
     // Depois penso em uma forma mais eficiente de fazer isso
     unsubscribe = database
       .collection("posts")
-      .doc(id)
-      .collection("userPosts")
       .orderBy("creation", "asc")
       .onSnapshot((query) => {
         const list = [];
@@ -68,8 +65,7 @@ export default function profileScreen({ user, navigation }) {
         query.forEach((doc) => {
           list.push({
             ...doc.data(),
-            postId: doc.id,
-            userId: id,
+            id: doc.id,
           });
         });
         console.log(list)
@@ -205,7 +201,7 @@ export default function profileScreen({ user, navigation }) {
 
           {posts.map((item) => (
             <Card
-              key={item.postId}
+              key={item.id}
               item={item}
               onUserPress={(user) => alert(user.name)}
               onPostPress={(post) => alert(post.title)}

@@ -21,13 +21,12 @@ export default function feedScreen() {
   const [personalPost, setPersonalPosts] = useState([]);
 
   useEffect(() => {
-    const userId = "xvxGHnARivZI8urHME2uC3PmcIr2"
 
-    getFeedPosts(userId).then((snapshot) => {
+    getFeedPosts().then((snapshot) => {
       let posts = snapshot.docs.map((doc) => {
         const data = doc.data();
-        const postId = doc.id;
-        return { postId, userId, ...data };
+        const id = doc.id;
+        return { id, ...data };
       });
       setUniversityPosts(posts);
       setPersonalPosts(posts);
@@ -45,7 +44,7 @@ export default function feedScreen() {
         <FlatList
           style={{flex:1}}
           data={universityPosts}
-          keyExtractor={(item) => item.postId}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <BigCard
               item={item}
@@ -58,7 +57,7 @@ export default function feedScreen() {
 
         {personalPost.map((item) => (
           <Card
-            key={item.postId}
+            key={item.id}
             item={item}
             onUserPress={(user) => alert(user.name)}
             onPostPress={(post) => alert(post.title)}

@@ -39,7 +39,7 @@ const now = new Date(Date.now())
 
 export default function createPostScreen({ navigation: { navigate } }) {
   const [title, setTitle] = useState('')
-  const [descrition, setDescrition] = useState('')
+  const [description, setDescription] = useState('')
   const [start, setStart] = useState(now)
   const [end, setEnd] = useState(now)
   const [category, setCategory] = useState([])
@@ -48,13 +48,13 @@ export default function createPostScreen({ navigation: { navigate } }) {
   async function createPost() {
     const data = {
       title,
-      descrition,
+      description,
       start,
       end,
       category,
       isPaid,
     }
-
+    
     let snapshot = await createPostData(data)
 
     if (snapshot.error) {
@@ -62,7 +62,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
     }
     else {
       setTitle('')
-      setDescrition('')
+      setDescription('')
       setStart('')
       setEnd('')
       setCategory('')
@@ -94,8 +94,8 @@ export default function createPostScreen({ navigation: { navigate } }) {
         <TextInput
           style={defaultStyle.inputHorizontal}
           placeholder='Descrição'
-          value={descrition}
-          onChangeText={setDescrition}
+          value={description}
+          onChangeText={setDescription}
           dataDetectorTypes='calendarEvent'
           multiline={true}
         />

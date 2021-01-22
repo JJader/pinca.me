@@ -3,11 +3,15 @@ import { auth, database, firebase } from '../config/firebase'
 export async function createPostData(data) {
   try {
     return await database.collection('posts')
-      .doc(auth.currentUser.uid)
-      .collection('userPosts')
       .add({
-        ...data,
-        collaborator: [],
+        category: data.category,
+        description: data.description,
+        end: data.end,
+        start: data.start,
+        status: 0,
+        title: data.title,
+        isPaid: data.isPaid,
+        collaborators: [],
         creator: auth.currentUser.uid,
         creation: firebase.firestore.FieldValue.serverTimestamp(),
       });
@@ -18,11 +22,9 @@ export async function createPostData(data) {
   }
 }
 
-export async function getFeedPosts(id) {
+export async function getFeedPosts() {
   try {
     return await database.collection('posts')
-      .doc(id)
-      .collection('userPosts')
       .orderBy('creation', 'asc')
       .get()
   } catch (error) {
@@ -30,11 +32,9 @@ export async function getFeedPosts(id) {
   }
 }
 
-export async function getUserPosts(id) {
+export async function getUserPosts() {
   try {
     return await database.collection('posts')
-      .doc(id)
-      .collection('userPosts')
       .orderBy('creation', 'asc')
       .get()
   } catch (error) {
