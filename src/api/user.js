@@ -6,7 +6,7 @@ export async function getUserData(id) {
   } catch (error) {
     console.log("erro em getUserData");
     return {
-      error: err.message,
+      error: error.message,
     };
   }
 }

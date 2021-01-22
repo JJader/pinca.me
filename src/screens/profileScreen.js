@@ -20,6 +20,8 @@ import { singOut } from "../api/login";
 
 import defaultPic from "../assets/defaultPic.jpg";
 
+import Card from "../components/card/card";
+
 var unsubscribe, unsubscribeUser;
 
 export default function profileScreen({ user, navigation }) {
@@ -49,7 +51,7 @@ export default function profileScreen({ user, navigation }) {
         const id = doc.id;
         return { id, ...data };
       });
-
+      console.log(posts);
       setPosts(posts);
     });
   }
@@ -214,6 +216,7 @@ export default function profileScreen({ user, navigation }) {
           horizontal={true}
           data={userData.category}
           renderItem={({ item }) => renderCategory(item)}
+          keyExtractor={(item, index) => index}
         />
       </View>
 
@@ -221,10 +224,17 @@ export default function profileScreen({ user, navigation }) {
         <Text style={{ marginTop: 10, marginBottom: 10 }}>
           Projetos realizados
         </Text>
+
         <FlatList
           data={posts}
-          renderItem={({ item }) => card(item)}
-          key={({ item }) => item.id}
+          renderItem={({ item }) => (
+            <Card
+              item={item}
+              onUserPress={(user) => alert(user.name)}
+              onPostPress={(post) => alert(post.title)}
+            />
+          )}
+          keyExtractor={(item, index) => index}
         />
       </View>
     </SafeAreaView>
