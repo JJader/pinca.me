@@ -3,7 +3,6 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import { Picker } from '@react-native-picker/picker'
 import { Ionicons } from '@expo/vector-icons';
-import { defaultStyle } from '../../styles/index'
 
 const sizeIcon = 35;
 
@@ -13,6 +12,10 @@ export default function pickerList({
   text = 'Clique aqui',
   displayKey = 'name',
   uniqueKey = 'id',
+  icon = null,
+  iconColor = 'black',
+  iconSize = 24,
+  style
 }) {
   const [selectedItem, setSelectedItem] = useState('')
 
@@ -27,12 +30,16 @@ export default function pickerList({
   }
 
   return (
-    <View style={styles.view}>
-      <Ionicons
-        name="ios-arrow-forward"
-        size={24}
-        color="black"
-      />
+    <View style={[style, styles.view]}>
+      {
+        !icon ? null : (
+          <Ionicons
+            name={icon}
+            size={iconSize}
+            color={iconColor}
+          />
+        )
+      }
 
       <Picker
         selectedValue={selectedItem}
@@ -66,23 +73,15 @@ const styles = StyleSheet.create({
   view: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
     flexDirection: 'row',
-    borderRadius: 15,
-    marginVertical: "5%",
-    minHeight: sizeIcon,
+    height: 60
   },
 
   pickerStyle: {
     flex: 1,
     color: 'black',
     justifyContent: 'center',
+    height: '100%'
   },
-
-  itemStyle: {
-    marginHorizontal: 10,
-    color: 'black',
-    fontSize: 10,
-  }
 })
 

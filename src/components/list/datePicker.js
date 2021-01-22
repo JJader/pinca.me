@@ -2,11 +2,16 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { lightGrey } from '../../styles/color'
 
 const now = new Date(Date.now())
 
 export default function datePicker({
-  onChange, styleDate, styleText, styleContainer, text
+  onChange, 
+  styleDate, 
+  styleText=styles.dateText, 
+  styleContainer, 
+  text
 }) {
 
   const [date, setDate] = useState(now)
@@ -56,6 +61,11 @@ export default function datePicker({
 const styles = StyleSheet.create({
   container: {
     flex: 1
-  }
+  },
+  
+  dateText: {
+    color: lightGrey,
+    marginBottom: 5
+  },
 })
 

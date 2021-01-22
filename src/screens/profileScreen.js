@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 
-import { getAllPosts } from "../api/posts";
+import { getUserPosts } from "../api/posts";
 import { getUserData } from "../api/user";
 import { auth, database } from "../config/firebase";
 
@@ -42,7 +42,7 @@ export default function profileScreen({ user, navigation }) {
   }, []);
 
   function getOtherPosts(id) {
-    getAllPosts(id).then((snapshot) => {
+    getUserPosts(id).then((snapshot) => {
       let posts = snapshot.docs.map((doc) => {
         const data = doc.data();
         const id = doc.id;

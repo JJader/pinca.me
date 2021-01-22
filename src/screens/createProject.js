@@ -16,6 +16,9 @@ import DatePicker from '../components/list/datePicker'
 import LoadingButton from '../components/button/loadingButton'
 import SelectList from '../components/list/selectList'
 import PickerList from '../components/list/pickerList'
+import Checkbox from '../components/button/checkbox'
+
+import { PROJECT_TYPE } from '../redux/constants/index'
 
 const items = [{
   id: '1',
@@ -40,6 +43,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
   const [start, setStart] = useState(now)
   const [end, setEnd] = useState(now)
   const [category, setCategory] = useState([])
+  const [isPaid, setIsPaid] = useState(false)
 
   async function createPost() {
     const data = {
@@ -48,6 +52,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
       start,
       end,
       category,
+      isPaid,
     }
 
     let snapshot = await createPostData(data)
@@ -66,7 +71,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollView} >
+    <ScrollView contentContainerStyle={defaultStyle.scrollView} >
       <StatusBar backgroundColor='black' />
       <View style={defaultStyle.container}>
         <Text style={defaultStyle.title}>Create project</Text>
@@ -77,9 +82,13 @@ export default function createPostScreen({ navigation: { navigate } }) {
           value={title}
           onChangeText={setTitle}
         />
+
         <PickerList
-          data={items}
+          data={PROJECT_TYPE}
           text={'Tipo'}
+          style={defaultStyle.input}
+          iconColor={pink}
+          icon='ios-school'
         />
 
         <TextInput
@@ -91,23 +100,32 @@ export default function createPostScreen({ navigation: { navigate } }) {
           multiline={true}
         />
 
-        <View style={styles.dataView}>
+        <Checkbox
+          style={defaultStyle.input}
+          text={'Possui bolsa'}
+          onValueChange={setIsPaid}
+        />
+
+        <View style={styles.dateView}>
           <DatePicker
             onChange={setStart}
             text='Data de início'
             styleText={styles.dateText}
+            styleContainer={styles.date}
           />
           <DatePicker
             onChange={setEnd}
             text='Data de conclusão'
             styleText={styles.dateText}
+            styleContainer={styles.date}
           />
         </View>
 
         <SelectList
-          style={styles.selectList}
+          style={[defaultStyle.input, styles.selectList]}
           text='Categorias'
           inputText='Procurar'
+          buttonText='Ok'
           data={items}
           onItemsChange={setCategory}
           buttonColor={pink}
@@ -125,22 +143,15 @@ export default function createPostScreen({ navigation: { navigate } }) {
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    alignItems: 'center',
-    width: '100%',
-    backgroundColor: 'white'
-  },
-
-  dataView: {
+  dateView: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginVertical: 20
   },
 
-  dateText: {
-    color: lightGrey,
-    marginBottom: 5
+  date: {
+    ...defaultStyle.input,
+    justifyContent: 'center',
+    margin: 5,
   },
 
   selectList: {

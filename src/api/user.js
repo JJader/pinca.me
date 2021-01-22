@@ -5,6 +5,9 @@ export async function getUserData(id) {
     return await database.collection("users").doc(id).get();
   } catch (error) {
     console.log("erro em getUserData");
+    return {
+      error: err.message,
+    };
   }
 }
 

@@ -5,8 +5,13 @@ export default StyleSheet.create({
 
   container: {
     flex: 1,
-    width: '90%',
+    width: '95%',
     alignSelf: 'center',
+    backgroundColor: 'white'
+  },
+
+  scrollView: {
+    width: '100%',
     backgroundColor: 'white'
   },
 

@@ -3,12 +3,12 @@ import { View, Text, StyleSheet } from 'react-native'
 import MultiSelect from 'react-native-multiple-select';
 
 export default function SelectList({
+  onItemsChange = () => { },
   data = [],
   text = 'Click  here',
   inputText = 'Search',
   buttonColor = '#CCC',
   buttonText = 'Submit',
-  onItemsChange,
   style,
   displayKey = 'name',
   uniqueKey = 'id',

@@ -17,7 +17,7 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <Tab.Navigator
-      initialRouteName="create"
+      initialRouteName="feed"
       sceneContainerStyle={{ backgroundColor: "white" }}
     >
       <Tab.Screen
