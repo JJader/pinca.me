@@ -106,8 +106,6 @@ export default function profileScreen({ user, navigation }) {
             <Text style={{ color: "gray", fontSize: 13 }}>@author</Text>
           </View>
         </View>
-        {/* <Text>Inicio: {start.toLocaleDateString()}</Text>
-        <Text>Conclusão: {end.toLocaleDateString()}</Text> */}
       </View>
     );
   }
