@@ -7,6 +7,8 @@ import { getUserData } from '../../api/user';
 import { lightGrey } from '../../styles/color'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+import { auth } from '../../config/firebase'
+
 export default function card({
   item = {},
   onPostPress = () => { },
@@ -15,7 +17,7 @@ export default function card({
   const [userData, setUserData] = useState({ name: '' })
 
   useEffect(() => {
-    getUserData(item.creator).then((snapshot) => {
+    getUserData(item.userId).then((snapshot) => {
       const data = snapshot.data();
       setUserData(data);
     })
@@ -49,7 +51,17 @@ const styles = StyleSheet.create({
     height: 130,
     justifyContent: 'space-between',
     padding: 10,
-    elevation: 1.5,
+    elevation: 2,
+
+    borderWidth:0.1,
+
+    shadowColor: "grey",
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    shadowOffset: {
+      height: 0,
+      width: 0
+    },    
   },
 
   title: {

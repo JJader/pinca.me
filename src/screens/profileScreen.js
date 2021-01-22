@@ -6,9 +6,8 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
+  FlatList,
 } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
 
 import { getUserPosts } from "../api/posts";
 import { getUserData } from "../api/user";
@@ -19,8 +18,9 @@ import { AntDesign } from "@expo/vector-icons";
 import { singOut } from "../api/login";
 
 import defaultPic from "../assets/defaultPic.jpg";
-
 import Card from "../components/card/card";
+import { defaultStyle } from "../styles/index";
+import { pink } from '../styles/color'
 
 var unsubscribe, unsubscribeUser;
 
@@ -40,7 +40,6 @@ export default function profileScreen({ user, navigation }) {
       setIsCurrentUser(true);
       getCurrentPosts(currentUser);
       getCurrentUser(currentUser);
-      getUser(currentUser);
     }
   }, []);
 
@@ -48,10 +47,10 @@ export default function profileScreen({ user, navigation }) {
     getUserPosts(id).then((snapshot) => {
       let posts = snapshot.docs.map((doc) => {
         const data = doc.data();
-        const id = doc.id;
-        return { id, ...data };
+        const postId = doc.id;
+        const userId = id;
+        return { postId, userId, ...data };
       });
-      console.log(posts);
       setPosts(posts);
     });
   }
@@ -69,9 +68,11 @@ export default function profileScreen({ user, navigation }) {
         query.forEach((doc) => {
           list.push({
             ...doc.data(),
-            id: doc.id,
+            postId: doc.id,
+            userId: id,
           });
         });
+        console.log(list)
         setPosts(list);
       });
   }
@@ -93,41 +94,19 @@ export default function profileScreen({ user, navigation }) {
       });
   }
 
-  function card(item) {
-    const start = new Date(item.start);
-    const end = new Date(item.end);
-
-    return (
-      <View style={styles.card}>
-        <Text style={{ fontWeight: "bold" }}>{item.title}</Text>
-        <Text style={{ color: "gray" }}>{item.descrition}</Text>
-        <View style={{ flexDirection: "row" }}>
-          <Image style={styles.cardPic} source={defaultPic} />
-          <View style={{ marginTop: 8, alignItems: "center" }}>
-            <Text style={{ fontWeight: "bold" }}>Author</Text>
-            <Text style={{ color: "gray", fontSize: 13 }}>@author</Text>
-          </View>
-        </View>
-      </View>
-    );
-  }
-
   function renderCategory(item) {
     return (
-      <View style={styles.card2}>
+      <View style={styles.card}>
         <Text>{item}</Text>
       </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView
-        directionalLockEnabled="true"
-        contentContainerStyle={{
-          alignItems: "center",
-        }}
-      >
+    <ScrollView
+      contentContainerStyle={defaultStyle.scrollView}
+    >
+      <View style={defaultStyle.container}>
         {isCurrentUser ? null : (
           <AntDesign
             name="back"
@@ -141,6 +120,7 @@ export default function profileScreen({ user, navigation }) {
         )}
         <View style={styles.profileTab}>
           <Image style={styles.profilePic} source={defaultPic} />
+
           <View style={styles.profileInfo}>
             <View style={{ alignItems: "center", flexDirection: "row" }}>
               <Text style={styles.textName}>{userData.name}</Text>
@@ -160,24 +140,23 @@ export default function profileScreen({ user, navigation }) {
 
             <Text style={styles.textCourse}>{userData.course}</Text>
             <Text style={styles.textUniversidade}>{userData.university}</Text>
-
-            <View>
-              {isCurrentUser ? (
-                <TouchableOpacity
-                  style={styles.buttonMessage}
-                  onPress={() => navigation.navigate("edit")}
+            
+            {isCurrentUser ? (
+              <TouchableOpacity
+                style={styles.buttonMessage}
+                onPress={() => navigation.navigate("edit")}
+              >
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
                 >
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      color: "white",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    EDITE SEU PERFIL
+                  EDITE SEU PERFIL
                   </Text>
-                </TouchableOpacity>
-              ) : (
+              </TouchableOpacity>
+            ) : (
                 <TouchableOpacity
                   style={styles.buttonMessage}
                   onPress={() => {
@@ -195,126 +174,111 @@ export default function profileScreen({ user, navigation }) {
                   </Text>
                 </TouchableOpacity>
               )}
-            </View>
           </View>
         </View>
         <View style={styles.descriptionTab}>
           <Text>{userData.bio}</Text>
         </View>
-      </ScrollView>
 
-      <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Text style={{ marginTop: 5, marginBottom: 5 }}>
-          Áreas de interesse
+
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ marginTop: 5, marginBottom: 5 }}>
+            Áreas de interesse
         </Text>
-        <FlatList
-          horizontal={true}
-          data={userData.category}
-          renderItem={({ item }) => renderCategory(item)}
-          keyExtractor={(item, index) => index}
-        />
-      </View>
+          <FlatList
+            horizontal={true}
+            data={userData.category}
+            renderItem={({ item }) => renderCategory(item)}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
 
-      <View style={{ width: "100%", alignItems: "center" }}>
-        <Text style={{ marginTop: 10, marginBottom: 10 }}>
-          Projetos realizados
+        <View style={{ width: "100%", alignItems: "center" }}>
+          <Text style={{ marginTop: 10, marginBottom: 10 }}>
+            Projetos realizados
         </Text>
 
-        <FlatList
-          data={posts}
-          renderItem={({ item }) => (
+          {posts.map((item) => (
             <Card
+              key={item.postId}
               item={item}
               onUserPress={(user) => alert(user.name)}
               onPostPress={(post) => alert(post.title)}
             />
-          )}
-          keyExtractor={(item, index) => index}
-        />
+          ))}
+
+        </View>
       </View>
-    </SafeAreaView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {},
+
   card: {
-    shadowColor: "gray",
-    shadowOffset: {
-      width: 1,
-      height: 1,
-    },
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
-    backgroundColor: "white",
-    marginVertical: 5,
-    alignSelf: "center",
-    padding: 5,
-    width: "100%",
-  },
-  cardPic: {
-    marginTop: 5,
-    marginRight: 5,
-    height: 40,
-    width: 40,
-    borderRadius: 20,
-  },
-  card2: {
     backgroundColor: "#C4C4C4",
     marginLeft: 8,
     alignSelf: "center",
     padding: 7,
     borderRadius: 5,
   },
+
   title: {
     fontSize: 20,
     fontWeight: "bold",
   },
+
   profilePic: {
     marginLeft: 15,
     height: 140,
     width: 140,
     borderRadius: 70,
   },
+
   profileTab: {
     position: "absolute",
     top: 50,
     flexDirection: "row",
   },
+
   textName: {
     fontSize: 32,
     marginRight: 10,
   },
+
   textUniversidade: {
     color: "#808080",
     fontSize: 14,
   },
+
   textCourse: {
     marginTop: 5,
     marginBottom: 5,
     color: "black",
     fontSize: 14,
   },
+
   buttonMessage: {
     marginTop: 8,
-    backgroundColor: "#E0174A",
+    backgroundColor: pink,
     height: 30,
-    width: 200,
+    width: '100%',
     borderRadius: 8,
-    borderColor: "white",
     justifyContent: "center",
     alignItems: "center",
   },
+
   profileInfo: {
-    width: "60%",
+    flex:1,
     justifyContent: "center",
     alignItems: "center",
   },
+
   descriptionTab: {
     backgroundColor: "#FAF6F6",
     marginTop: 200,
@@ -323,8 +287,10 @@ const styles = StyleSheet.create({
     width: "95%",
     height: 120,
   },
+
   backButton: {
     marginTop: 15,
     marginRight: 320,
   },
+
 });

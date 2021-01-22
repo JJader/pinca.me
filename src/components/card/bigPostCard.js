@@ -26,7 +26,7 @@ export default function bigCard({
   const [userData, setUserData] = useState({ name: '' })
 
   useEffect(() => {
-    getUserData(item.creator).then((snapshot) => {
+    getUserData(item.userId).then((snapshot) => {
       const data = snapshot.data();
       setUserData(data);
     })

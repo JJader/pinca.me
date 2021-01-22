@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
-export function displayItems({
+export default function displayItems({
   items, displayKey = 'name', uniqueKey = 'id'
 }) {
 
