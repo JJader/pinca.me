@@ -39,7 +39,10 @@ export default function bigCard({
         onPress={() => (onPostPress(item))}
       >
         <Image
-          source={require('../../assets/logo.png')}
+          source={{
+            uri:
+              'https://picsum.photos/seed/' + Math.random() + '/500/500'
+          }}
           resizeMode={'cover'}
           style={styles.imagenView}
         />

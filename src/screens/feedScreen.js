@@ -43,7 +43,7 @@ export default function feedScreen() {
         <Text style={styles.text}>PROJETOS EM DESTAQUE</Text>
 
         <FlatList
-          style={{ marginBottom: 70 }}
+          style={{flex:1}}
           data={universityPosts}
           keyExtractor={(item) => item.postId}
           renderItem={({ item }) => (

@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
     height: 130,
     justifyContent: 'space-between',
     padding: 10,
+    
     elevation: 2,
-
     borderWidth:0.1,
 
     shadowColor: "grey",
