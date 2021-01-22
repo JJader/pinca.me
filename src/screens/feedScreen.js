@@ -6,6 +6,7 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
+  RefreshControl,
 } from "react-native";
 
 import BigCard from "../components/card/bigPostCard";
@@ -19,9 +20,14 @@ import Card from "../components/card/card";
 export default function feedScreen() {
   const [universityPosts, setUniversityPosts] = useState([]);
   const [personalPost, setPersonalPosts] = useState([]);
+  const [refreshing, setRefreshing] = useState(false)
 
   useEffect(() => {
+    updatePosts()
+  }, []);
 
+  function updatePosts() {
+    setRefreshing(true)
     getFeedPosts().then((snapshot) => {
       let posts = snapshot.docs.map((doc) => {
         const data = doc.data();
@@ -30,11 +36,21 @@ export default function feedScreen() {
       });
       setUniversityPosts(posts);
       setPersonalPosts(posts);
+      setRefreshing(false)
     });
-  }, []);
+  }
 
   return (
-    <ScrollView contentContainerStyle={defaultStyle.scrollView}>
+    <ScrollView
+      contentContainerStyle={defaultStyle.scrollView}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={() => updatePosts()}
+        />
+      }
+    >
+
       <StatusBar backgroundColor="black" />
       <View style={[defaultStyle.container]}>
         <Text style={defaultStyle.title}>Explorar</Text>
@@ -42,7 +58,7 @@ export default function feedScreen() {
         <Text style={styles.text}>PROJETOS EM DESTAQUE</Text>
 
         <FlatList
-          style={{flex:1}}
+          style={{ flex: 1 }}
           data={universityPosts}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (

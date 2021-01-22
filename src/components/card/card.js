@@ -18,8 +18,10 @@ export default function card({
 
   useEffect(() => {
     getUserData(item.creator).then((snapshot) => {
-      const data = snapshot.data();
-      setUserData(data);
+      if (!snapshot.error) {
+        const data = snapshot.data();
+        setUserData(data);
+      }
     })
   }, [item.id])
 
@@ -51,9 +53,9 @@ const styles = StyleSheet.create({
     height: 130,
     justifyContent: 'space-between',
     padding: 10,
-    
+
     elevation: 2,
-    borderWidth:0.1,
+    borderWidth: 0.1,
 
     shadowColor: "grey",
     shadowOpacity: 0.3,
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
     shadowOffset: {
       height: 0,
       width: 0
-    },    
+    },
   },
 
   title: {

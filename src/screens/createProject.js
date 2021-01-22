@@ -54,20 +54,15 @@ export default function createPostScreen({ navigation: { navigate } }) {
       category,
       isPaid,
     }
-    
-    let snapshot = await createPostData(data)
 
-    if (snapshot.error) {
-      alert(snapshot.error.message)
-    }
-    else {
+    await createPostData(data).then(() => {
       setTitle('')
       setDescription('')
       setStart('')
       setEnd('')
       setCategory('')
       navigate('feed')
-    }
+    })
   };
 
   return (

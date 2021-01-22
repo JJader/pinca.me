@@ -34,49 +34,17 @@ export default function profileScreen({ user, navigation }) {
 
     if (user && user.id != currentUser) {
       setIsCurrentUser(false);
-      getOtherPosts(user.id);
-      getUser(user.id);
+      getOtherUser(user.id);
     } else {
       setIsCurrentUser(true);
-      getCurrentPosts(currentUser);
       getCurrentUser(currentUser);
     }
   }, []);
 
-  function getOtherPosts(id) {
-    getUserPosts(id).then((snapshot) => {
-      let posts = snapshot.docs.map((doc) => {
-        const data = doc.data();
-        const id = doc.id;
-        return { id, ...data };
-      });
-      setPosts(posts);
-    });
-  }
-
-  function getCurrentPosts(id) {
-    // Depois penso em uma forma mais eficiente de fazer isso
-    unsubscribe = database
-      .collection("posts")
-      .orderBy("creation", "asc")
-      .onSnapshot((query) => {
-        const list = [];
-
-        query.forEach((doc) => {
-          list.push({
-            ...doc.data(),
-            id: doc.id,
-          });
-        });
-        console.log(list)
-        setPosts(list);
-      });
-  }
-
-  function getUser(id) {
-    getUserData(id).then((snapshot) => {
-      const userData = snapshot.data();
-      setUserData(userData);
+  function getOtherUser(id) {
+    getUserData(id).then((user) => {
+      setUserData(user.data());
+      getPosts(user.data().projects)
     });
   }
 
@@ -87,7 +55,14 @@ export default function profileScreen({ user, navigation }) {
       .doc(id)
       .onSnapshot((query) => {
         setUserData(query.data());
+        getPosts(query.data().projects)
       });
+  }
+
+  function getPosts(ids) {
+    getUserPosts(ids).then((snapshot) => {
+      setPosts(snapshot)
+    })
   }
 
   function renderCategory(item) {
@@ -136,7 +111,7 @@ export default function profileScreen({ user, navigation }) {
 
             <Text style={styles.textCourse}>{userData.course}</Text>
             <Text style={styles.textUniversidade}>{userData.university}</Text>
-            
+
             {isCurrentUser ? (
               <TouchableOpacity
                 style={styles.buttonMessage}
@@ -270,7 +245,7 @@ const styles = StyleSheet.create({
   },
 
   profileInfo: {
-    flex:1,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
