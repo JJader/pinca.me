@@ -15,7 +15,10 @@ import { getFeedPosts } from "../api/posts";
 
 import { pink, lightGrey } from "../styles/color";
 import { defaultStyle } from "../styles/index";
+
 import Card from "../components/card/card";
+import PickerList from '../components/list/pickerList'
+import FilterModal from '../components/modal/filterModal'
 
 export default function feedScreen() {
   const [universityPosts, setUniversityPosts] = useState([]);
@@ -71,6 +74,10 @@ export default function feedScreen() {
           horizontal={true}
         />
 
+        <FilterModal
+        
+        />
+
         {personalPost.map((item) => (
           <Card
             key={item.id}
@@ -89,4 +96,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
   },
+
+  
+
 });

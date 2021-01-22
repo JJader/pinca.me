@@ -40,6 +40,17 @@ export async function getFeedPosts() {
   }
 }
 
+export async function getFilterPosts() {
+  try {
+    return await database.collection('posts')
+      .orderBy('creation', 'asc')
+      .get()
+  } catch (error) {
+    console.log('error getFeedPosts ' + error.message)
+    return []
+  }
+}
+
 export async function getUserPosts(ids) {
   try {
     let list = [];
