@@ -7,6 +7,12 @@ export async function registration(email, password, data) {
       .collection("users")
       .doc(auth.currentUser.uid)
       .set({
+        bio: "",
+        category: [],
+        university: "",
+        course: "",
+        picture: "",
+        projects: [],
         email: email,
         ...data,
       });

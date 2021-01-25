@@ -50,7 +50,7 @@ export default function signUpScreen({ navigation }) {
         ></TextInput>
         <TextInput
           style={styles.input}
-          placeholder="Apelido"
+          placeholder="Nome"
           value={nickname}
           onChangeText={setNickName}
         ></TextInput>

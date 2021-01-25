@@ -20,9 +20,9 @@ import { singOut } from "../api/login";
 import defaultPic from "../assets/defaultPic.jpg";
 import Card from "../components/card/card";
 import { defaultStyle } from "../styles/index";
-import { pink } from '../styles/color'
+import { pink } from "../styles/color";
 
-var unsubscribe, unsubscribeUser;
+var unsubscribeUser;
 
 export default function profileScreen({ user, navigation }) {
   const [posts, setPosts] = useState([]);
@@ -44,7 +44,7 @@ export default function profileScreen({ user, navigation }) {
   function getOtherUser(id) {
     getUserData(id).then((user) => {
       setUserData(user.data());
-      getPosts(user.data().projects)
+      getPosts(user.data().projects);
     });
   }
 
@@ -55,14 +55,14 @@ export default function profileScreen({ user, navigation }) {
       .doc(id)
       .onSnapshot((query) => {
         setUserData(query.data());
-        getPosts(query.data().projects)
+        getPosts(query.data().projects);
       });
   }
 
   function getPosts(ids) {
     getUserPosts(ids).then((snapshot) => {
-      setPosts(snapshot)
-    })
+      setPosts(snapshot);
+    });
   }
 
   function renderCategory(item) {
@@ -74,9 +74,7 @@ export default function profileScreen({ user, navigation }) {
   }
 
   return (
-    <ScrollView
-      contentContainerStyle={defaultStyle.scrollView}
-    >
+    <ScrollView contentContainerStyle={defaultStyle.scrollView}>
       <View style={defaultStyle.container}>
         {isCurrentUser ? null : (
           <AntDesign
@@ -101,7 +99,6 @@ export default function profileScreen({ user, navigation }) {
                   size={24}
                   color="#808080"
                   onPress={() => {
-                    unsubscribe();
                     unsubscribeUser();
                     singOut();
                   }}
@@ -125,32 +122,31 @@ export default function profileScreen({ user, navigation }) {
                   }}
                 >
                   EDITE SEU PERFIL
-                  </Text>
+                </Text>
               </TouchableOpacity>
             ) : (
-                <TouchableOpacity
-                  style={styles.buttonMessage}
-                  onPress={() => {
-                    user.talk();
+              <TouchableOpacity
+                style={styles.buttonMessage}
+                onPress={() => {
+                  user.talk();
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: "white",
+                    fontWeight: "bold",
                   }}
                 >
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      color: "white",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    ENVIE UMA MENSSAGEM
-                  </Text>
-                </TouchableOpacity>
-              )}
+                  ENVIE UMA MENSSAGEM
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         <View style={styles.descriptionTab}>
           <Text>{userData.bio}</Text>
         </View>
-
 
         <View
           style={{
@@ -160,7 +156,7 @@ export default function profileScreen({ user, navigation }) {
         >
           <Text style={{ marginTop: 5, marginBottom: 5 }}>
             Áreas de interesse
-        </Text>
+          </Text>
           <FlatList
             horizontal={true}
             data={userData.category}
@@ -172,7 +168,7 @@ export default function profileScreen({ user, navigation }) {
         <View style={{ width: "100%", alignItems: "center" }}>
           <Text style={{ marginTop: 10, marginBottom: 10 }}>
             Projetos realizados
-        </Text>
+          </Text>
 
           {posts.map((item) => (
             <Card
@@ -182,7 +178,6 @@ export default function profileScreen({ user, navigation }) {
               onPostPress={(post) => alert(post.title)}
             />
           ))}
-
         </View>
       </View>
     </ScrollView>
@@ -190,7 +185,6 @@ export default function profileScreen({ user, navigation }) {
 }
 
 const styles = StyleSheet.create({
-
   card: {
     backgroundColor: "#C4C4C4",
     marginLeft: 8,
@@ -238,7 +232,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     backgroundColor: pink,
     height: 30,
-    width: '100%',
+    width: "100%",
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
@@ -263,5 +257,4 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginRight: 320,
   },
-
 });

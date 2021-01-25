@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StatusBar,
   StyleSheet,
@@ -15,7 +15,8 @@ import defaultPic from "../assets/defaultPic.jpg";
 import SelectList from "../components/list/selectList";
 import { auth } from "../config/firebase";
 import { updateUser } from "../api/user";
-import { abs } from "react-native-reanimated";
+
+import { getUserData } from "../api/user";
 
 const items = [
   {
@@ -43,6 +44,18 @@ export default function editScreen({ navigation }) {
   const [university, setUniversity] = useState("");
   const [category, setCategory] = useState([]);
   const [picture, setPicture] = useState("");
+
+  useEffect(() => {
+    let currentUser = auth.currentUser.uid;
+    getUserData(currentUser).then((userData) => {
+      setName(userData.data().name);
+      setBio(userData.data().bio);
+      setCourse(userData.data().course);
+      setUniversity(userData.data().university);
+      // setCategory(userData.data().category);
+      setPicture(userData.data().picture);
+    });
+  }, []);
 
   async function salvarDados() {
     const data = {
@@ -125,6 +138,7 @@ export default function editScreen({ navigation }) {
           data={items}
           onItemsChange={setCategory}
           buttonColor="black"
+          buttonText="Adicionar"
         />
 
         <TouchableOpacity
