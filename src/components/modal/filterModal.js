@@ -22,12 +22,10 @@ export default function filterModal({
 }) {
 
   const [isVisible, setIsVisible] = useState(false)
-  const [filtroText, setFiltroText] = useState(text)
 
-  function selectOneCheckbox(parametro, operador, valor, texto) {
+  function selectItem(parametro, operador, valor, texto) {
     setIsVisible(!isVisible)
-    setFiltroText(texto);
-    onFilter(parametro, operador,valor)
+    onFilter(parametro, operador, valor, texto)
   }
 
   return (
@@ -35,7 +33,7 @@ export default function filterModal({
       <TouchableOpacity style={viewStyle}
         onPress={() => (setIsVisible(!isVisible))}
       >
-        <Text style={textStyle}>{filtroText}</Text>
+        <Text style={textStyle}>{text}</Text>
         <MaterialCommunityIcons
           name="filter-variant"
           size={30}
@@ -51,6 +49,15 @@ export default function filterModal({
 
         <View style={styles.modalBackground} >
           <View style={styles.container}>
+
+            <MaterialCommunityIcons
+              name="close-circle"
+              size={24}
+              color={pink}
+              style={{alignSelf:'flex-end'}}
+              onPress={()=>(setIsVisible(!isVisible))}
+            />
+
             <Text style={styles.title}>
               Clique na opção do seu interesse
             </Text>
@@ -58,7 +65,7 @@ export default function filterModal({
             <LoadingButton
               text={'Projetos com bolsa'}
               onPress={() => {
-                selectOneCheckbox(
+                selectItem(
                   'isPaid',
                   '==',
                   true,
@@ -75,7 +82,7 @@ export default function filterModal({
                   key={type.id}
                   text={type.name}
                   onPress={() => {
-                    selectOneCheckbox(
+                    selectItem(
                       'type',
                       '==',
                       type.id,
@@ -87,13 +94,9 @@ export default function filterModal({
                 />
               ))
             }
-
-
           </View>
-
         </View>
       </Modal>
-
     </View>
   )
 }
@@ -122,7 +125,6 @@ const styles = StyleSheet.create({
   viewFilter: {
     flex: 1,
     flexDirection: 'row',
-    marginTop: 70,
     alignItems: 'center',
     justifyContent: 'flex-end'
   },

@@ -17,13 +17,13 @@ import { pink, lightGrey } from "../styles/color";
 import { defaultStyle } from "../styles/index";
 
 import Card from "../components/card/card";
-import PickerList from '../components/list/pickerList'
 import FilterModal from '../components/modal/filterModal'
 
 export default function feedScreen() {
   const [universityPosts, setUniversityPosts] = useState([]);
   const [personalPost, setPersonalPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false)
+  const [filterText, setFilterText] = useState('FILTRAR')
 
   useEffect(() => {
     updatePosts()
@@ -37,13 +37,15 @@ export default function feedScreen() {
         const id = doc.id;
         return { id, ...data };
       });
+
       setUniversityPosts(posts);
       setPersonalPosts(posts);
+      setFilterText('FILTRAR')
       setRefreshing(false)
     });
   }
 
-  const tryFilterPosts = (param, operator, value) => {
+  const tryFilterPosts = (param, operator, value,text) => {
     getFilterPosts(param, operator, value).then((snapshot) => {
       let posts = snapshot.docs.map((doc) => {
         const data = doc.data();
@@ -51,6 +53,7 @@ export default function feedScreen() {
         return { id, ...data };
       });
 
+      setFilterText(text)
       setPersonalPosts(posts);
     })
   }
@@ -73,7 +76,7 @@ export default function feedScreen() {
         <Text style={styles.text}>PROJETOS EM DESTAQUE</Text>
 
         <FlatList
-          style={{ flex: 1 }}
+          style={{ flex: 1 , marginBottom: 60}}
           data={universityPosts}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
@@ -88,7 +91,7 @@ export default function feedScreen() {
 
         <FilterModal
           onFilter={tryFilterPosts}
-
+          text={filterText}
         />
 
         {personalPost.map((item) => (
