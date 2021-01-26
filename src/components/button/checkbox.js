@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import Checkbox from 'expo-checkbox'
+import {CheckBox} from 'react-native-elements'
 import {pink} from '../../styles/color'
 
 export default function checkbox({
@@ -13,19 +13,21 @@ export default function checkbox({
 
   const [value, setvalue] = useState(false)
 
-  const valueChange = (value) => {
-    setvalue(value)
-    onValueChange(value)
+  const valueChange = () => {
+    const newValue = !value
+    setvalue(newValue)
+    onValueChange(newValue)
   }
 
   return (
-    <View style={[styles.container, style]}>
-      <Checkbox
-        shouldRasterizeIOS={true}
-        color={boxColor}
-        style={{ marginRight: 8 }}
-        value={value}
-        onValueChange={valueChange}
+    <View style={[style,styles.container]}>
+      <CheckBox
+        size={25}
+        checkedColor={pink}
+        uncheckedColor={pink}
+        checked={value}
+        onPress={valueChange}
+        containerStyle={{padding:0}}
       />
       <Text style={styleText}>{text}</Text>
     </View>
@@ -36,6 +38,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    padding:0,
   }
 })

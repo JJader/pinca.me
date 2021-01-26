@@ -10,6 +10,7 @@
   "dependencies": {
     "@react-native-community/datetimepicker": "3.0.4",
     "@react-native-community/masked-view": "0.1.10",
+    "@react-native-picker/picker": "1.9.2",
     "@react-navigation/bottom-tabs": "^5.11.3",
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",
@@ -22,6 +23,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "~0.63.4",
+    "react-native-elements": "^3.1.0",
     "react-native-gesture-handler": "~1.8.0",
     "react-native-multiple-select": "^0.5.6",
     "react-native-reanimated": "~1.13.0",
@@ -31,9 +33,7 @@
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "@react-native-picker/picker": "1.9.2",
-    "expo-checkbox": "~1.0.0"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
