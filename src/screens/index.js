@@ -7,6 +7,7 @@ import ProfileScreen from "./profileScreen";
 import FirstScreen from "./firstScreen";
 import ChatScreen from "./chatScreen";
 import EditScreen from "./editScreen";
+import MoreInfoScreen from "./moreInfoScreen";
 
 export {
   LoginScreen,
@@ -18,4 +19,5 @@ export {
   FirstScreen,
   ChatScreen,
   EditScreen,
+  MoreInfoScreen,
 };

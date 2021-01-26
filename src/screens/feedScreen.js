@@ -19,7 +19,7 @@ import { defaultStyle } from "../styles/index";
 import Card from "../components/card/card";
 import FilterModal from "../components/modal/filterModal";
 
-export default function feedScreen() {
+export default function feedScreen({ navigation }) {
   const [universityPosts, setUniversityPosts] = useState([]);
   const [personalPost, setPersonalPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -104,7 +104,10 @@ export default function feedScreen() {
             <BigCard
               item={item}
               onUserPress={(user) => alert(user.name)}
-              onPostPress={(post) => alert(post.title)}
+              onPostPress={(post, user) => {
+                navigation.navigate('moreinfo', { ...post, user})
+              }
+              }
             />
           )}
           horizontal={true}

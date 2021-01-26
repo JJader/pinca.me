@@ -35,7 +35,7 @@ export default function bigCard({
     <View style={styles.container}>
       <TouchableOpacity
         style={{ flex: 2 }}
-        onPress={() => onPostPress(item)}
+        onPress={() => onPostPress(item, userData)}
       >
 
         <Image

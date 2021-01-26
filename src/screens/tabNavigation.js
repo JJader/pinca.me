@@ -9,6 +9,7 @@ import {
   MakeProjectScreen,
   ProfileScreen,
   ChatScreen,
+  MoreInfoScreen
 } from "./index";
 
 const Tab = createBottomTabNavigator();
@@ -67,6 +68,15 @@ export default function App() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="ios-person" size={size} color={color} />
           ),
+        }}
+      />
+      <Tab.Screen
+        name="moreinfo"
+        component={MoreInfoScreen}
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          title: () => null,
         }}
       />
     </Tab.Navigator>
