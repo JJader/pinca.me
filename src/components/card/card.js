@@ -7,7 +7,7 @@ import { getUserData } from '../../api/user';
 import { lightGrey } from '../../styles/color'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-import { auth } from '../../config/firebase'
+import {defaultStyle} from '../../styles/index'
 
 export default function card({
   item = {},
@@ -54,16 +54,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 10,
 
-    elevation: 2,
-    borderWidth: 0.1,
-
-    shadowColor: "grey",
-    shadowOpacity: 0.3,
-    shadowRadius: 3,
-    shadowOffset: {
-      height: 0,
-      width: 0
-    },
+    ...defaultStyle.shadow
   },
 
   title: {

@@ -47,4 +47,18 @@ export default StyleSheet.create({
     borderRadius: 5,
     height: 60,
   },
+
+  shadow: {
+    elevation: 2,
+    borderWidth: 0.1,
+
+    shadowColor: "grey",
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    shadowOffset: {
+      height: 0,
+      width: 0
+    },
+  }
+  
 })

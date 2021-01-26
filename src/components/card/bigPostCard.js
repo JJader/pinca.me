@@ -12,6 +12,7 @@ import UserBar from '../button/userBar'
 
 import { getUserData } from '../../api/user';
 import { lightGrey } from '../../styles/color'
+import { defaultStyle } from '../../styles';
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -62,7 +63,7 @@ export default function bigCard({
       <UserBar
         name={userData.name}
         image={require('../../assets/defaultPic.jpg')}
-        style={{ flex: 1 / 4 }}
+        style={{ flex: 1 / 4, padding:10 }}
         onPress={() => onUserPress(userData)}
       />
     </View>
@@ -71,14 +72,18 @@ export default function bigCard({
 
 const styles = StyleSheet.create({
   container: {
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     flex: 1,
     width: windowWidth * 0.9,
     marginHorizontal: 20,
-    height: windowHeight * 0.45,
+    height: windowHeight * 0.55,
+    ...defaultStyle.shadow
   },
 
   viewText: {
     flex: 1,
+    padding:10
   },
 
   title: {
@@ -92,7 +97,7 @@ const styles = StyleSheet.create({
   },
 
   imagenView: {
-    flex: 1,
+    flex: 1.5,
     width: '100%',
     overflow: 'hidden',
     borderTopLeftRadius: 30,
