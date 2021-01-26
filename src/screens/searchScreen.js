@@ -14,6 +14,7 @@ import ProfileScreen from "./profileScreen";
 
 import { defaultStyle } from '../styles/index'
 import { lightGrey } from '../styles/color'
+import UserBar from "../components/button/userBar";
 
 export default function search({ navigation }) {
   const [users, setUsers] = useState([]);
@@ -59,18 +60,6 @@ export default function search({ navigation }) {
     setIsFind(false);
   }
 
-  function userItem(item) {
-    return (
-      <TouchableOpacity
-        style={styles.buttonItem}
-        onPress={() => clickOnUser(item)}
-      >
-        <Text style={styles.name}>{item.name} </Text>
-        <Text style={styles.email}> {item.email}</Text>
-      </TouchableOpacity>
-    );
-  }
-
   function clickOnUser(user) {
     setUserFound(user);
     setIsFind(true);
@@ -79,36 +68,28 @@ export default function search({ navigation }) {
   return (
     <View style={defaultStyle.container}>
       <Text style={defaultStyle.title}>Search</Text>
+      
       <TextInput
         style={defaultStyle.input}
         onChangeText={searchUser}
         placeholder="Search"
       />
+
       <FlatList
         data={users}
-        renderItem={({ item }) => userItem(item)}
         key={({ item }) => item.id}
+        renderItem={({ item }) => (
+          <UserBar
+            name={item.name}
+            email={item.email}
+            styleText={{ fontSize: 18 }}
+            style={{ marginTop: 30 }}
+            onPress={() => clickOnUser(item)}
+          />
+        )}
       />
 
       <ProfileModal />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  buttonItem: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 10,
-  },
-
-  name: {
-    fontWeight: "bold",
-    fontSize: 20,
-  },
-
-  email: {
-    color: lightGrey,
-  },
-});

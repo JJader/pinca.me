@@ -1,25 +1,37 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity
+} from 'react-native'
+import { Avatar } from 'react-native-elements'
+import { lightGrey } from '../../styles/color'
+
 
 export default function userBar({
   name,
-  image,
-  style={height:40},
+  email,
+  image = require('../../assets/defaultPic.jpg'),
+  style = { height: 40 },
   styleText,
   onPress = () => { }
 }) {
   return (
     <View style={[styles.viewUser, style]}>
       <TouchableOpacity
-        onPress={() =>( onPress())}
+        onPress={() => (onPress())}
       >
-        <Image
+        <Avatar
+          rounded
           source={image}
-          style={styles.image}
+          size="small"
         />
       </TouchableOpacity>
+      
       <Text style={[styles.userName, styleText]}>{name}</Text>
+      <Text style={styles.email}>   {email}</Text>
     </View>
   )
 }
@@ -30,15 +42,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 
-  image: {
-    width: 40,
-    height: '100%',
-    borderRadius: 40,
-  },
-
   userName: {
     fontWeight: 'bold',
     marginLeft: 10,
-  }
+  },
+  
+  email: {
+    color: lightGrey,
+  },
 })
 
