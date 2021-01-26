@@ -17,44 +17,16 @@ export default function loadingButton({
 }) {
 
   const [loading, setLoading] = useState(false)
-  function IsNotLoding() {
-    return (
+
+  return (
+    <View style={styleButton}>
       <TouchableOpacity style={styles.button}
-        onPress={() => (pressButton().then())}
+        onPress={() => (onPress())}
       >
         <Text style={styleText}>
           {text}
         </Text>
       </TouchableOpacity>
-    )
-  }
-
-  async function pressButton() {
-    setLoading(true)
-    await onPress()
-    setLoading(false)
-  }
-
-  function isLoding() {
-    return (
-      <ActivityIndicator
-        style={styles.button}
-        size="large"
-        color="white"
-        animating={true}
-      />
-    )
-  }
-  return (
-    <View style={styleButton}>
-      {loading ?
-        (
-          isLoding()
-        ) :
-        (
-          IsNotLoding()
-        )
-      }
     </View>
   )
 }
