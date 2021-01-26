@@ -44,6 +44,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
   const [end, setEnd] = useState(now)
   const [category, setCategory] = useState([])
   const [isPaid, setIsPaid] = useState(false)
+  const [type, setType] = useState(false)
 
   async function createPost() {
     const data = {
@@ -53,6 +54,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
       end,
       category,
       isPaid,
+      type,
     }
 
     await createPostData(data).then(() => {
@@ -84,6 +86,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
           style={defaultStyle.input}
           iconColor={pink}
           icon='ios-school'
+          onValueChange={setType}
         />
 
         <TextInput

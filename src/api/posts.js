@@ -40,10 +40,10 @@ export async function getFeedPosts() {
   }
 }
 
-export async function getFilterPosts() {
+export async function getFilterPosts(param, operator, value) {
   try {
     return await database.collection('posts')
-      .orderBy('creation', 'asc')
+      .where(param, operator, value)
       .get()
   } catch (error) {
     console.log('error getFeedPosts ' + error.message)

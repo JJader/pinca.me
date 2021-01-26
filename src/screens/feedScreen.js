@@ -11,7 +11,7 @@ import {
 
 import BigCard from "../components/card/bigPostCard";
 
-import { getFeedPosts } from "../api/posts";
+import { getFeedPosts, getFilterPosts } from "../api/posts";
 
 import { pink, lightGrey } from "../styles/color";
 import { defaultStyle } from "../styles/index";
@@ -41,6 +41,18 @@ export default function feedScreen() {
       setPersonalPosts(posts);
       setRefreshing(false)
     });
+  }
+
+  const tryFilterPosts = (param, operator, value) => {
+    getFilterPosts(param, operator, value).then((snapshot) => {
+      let posts = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        const id = doc.id;
+        return { id, ...data };
+      });
+
+      setPersonalPosts(posts);
+    })
   }
 
   return (
@@ -75,7 +87,8 @@ export default function feedScreen() {
         />
 
         <FilterModal
-        
+          onFilter={tryFilterPosts}
+
         />
 
         {personalPost.map((item) => (
@@ -97,6 +110,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  
+
 
 });
