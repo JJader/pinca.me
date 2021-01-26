@@ -31,6 +31,28 @@ export default function feedScreen() {
 
   function updatePosts() {
     setRefreshing(true);
+
+    updatePersonalPosts();
+    updateUniversityPosts();
+
+    setRefreshing(false);
+
+  }
+
+  function updatePersonalPosts() {
+    getFeedPosts().then((snapshot) => {
+      let posts = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        const id = doc.id;
+        return { id, ...data };
+      });
+
+      setFilterText("FILTRAR");
+      setPersonalPosts(posts);
+    });
+  }
+
+  function updateUniversityPosts() {
     getFeedPosts().then((snapshot) => {
       let posts = snapshot.docs.map((doc) => {
         const data = doc.data();
@@ -39,9 +61,6 @@ export default function feedScreen() {
       });
 
       setUniversityPosts(posts);
-      setPersonalPosts(posts);
-      setFilterText("FILTRAR");
-      setRefreshing(false);
     });
   }
 
@@ -77,8 +96,7 @@ export default function feedScreen() {
         <FlatList
           style={{
             flex: 1,
-            marginBottom: 15,
-            ...defaultStyle.shadow,
+            marginBottom: 50,
           }}
           data={universityPosts}
           keyExtractor={(item) => item.id}
@@ -92,7 +110,11 @@ export default function feedScreen() {
           horizontal={true}
         />
 
-        <FilterModal onFilter={tryFilterPosts} text={filterText} />
+        <FilterModal
+          onFilter={tryFilterPosts}
+          text={filterText}
+          onNoFilter={() => updatePersonalPosts()}
+        />
 
         {personalPost.map((item) => (
           <Card

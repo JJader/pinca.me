@@ -107,13 +107,13 @@ export default function createPostScreen({ navigation: { navigate } }) {
         <View style={styles.dateView}>
           <DatePicker
             onChange={setStart}
-            text='Data de início'
+            text='Início da seleção'
             styleText={styles.dateText}
             styleContainer={styles.date}
           />
           <DatePicker
             onChange={setEnd}
-            text='Data de conclusão'
+            text='Fim da seleção'
             styleText={styles.dateText}
             styleContainer={styles.date}
           />

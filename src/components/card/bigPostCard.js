@@ -19,8 +19,8 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function bigCard({
   item = {},
-  onPostPress = () => {},
-  onUserPress = () => {},
+  onPostPress = () => { },
+  onUserPress = () => { },
 }) {
   const [userData, setUserData] = useState({ name: "" });
 
@@ -33,7 +33,11 @@ export default function bigCard({
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={{ flex: 2 }} onPress={() => onPostPress(item)}>
+      <TouchableOpacity
+        style={{ flex: 2 }}
+        onPress={() => onPostPress(item)}
+      >
+
         <Image
           source={{
             uri: "https://picsum.photos/seed/" + Math.random() + "/500/500",
@@ -64,7 +68,8 @@ export default function bigCard({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    borderRadius: 30,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     flex: 1,
     width: windowWidth * 0.9,
     marginHorizontal: 10,

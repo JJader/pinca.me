@@ -18,7 +18,8 @@ export default function filterModal({
   textStyle = styles.textFilter,
   viewStyle = styles.viewFilter,
   text = 'FILTRAR',
-  onFilter = () => { }
+  onFilter = () => { },
+  onNoFilter = () => { }
 }) {
 
   const [isVisible, setIsVisible] = useState(false)
@@ -26,6 +27,11 @@ export default function filterModal({
   function selectItem(parametro, operador, valor, texto) {
     setIsVisible(!isVisible)
     onFilter(parametro, operador, valor, texto)
+  }
+
+  function onPressIcon() {
+    setIsVisible(!isVisible)
+    onNoFilter()
   }
 
   return (
@@ -54,8 +60,8 @@ export default function filterModal({
               name="close-circle"
               size={24}
               color={pink}
-              style={{alignSelf:'flex-end'}}
-              onPress={()=>(setIsVisible(!isVisible))}
+              style={{ alignSelf: 'flex-end' }}
+              onPress={() => (onPressIcon())}
             />
 
             <Text style={styles.title}>
