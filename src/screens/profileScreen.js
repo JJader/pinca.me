@@ -208,6 +208,7 @@ const styles = StyleSheet.create({
   profileTab: {
     position: "absolute",
     top: 50,
+    left: -8,
     flexDirection: "row",
   },
 
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
     marginTop: 200,
     justifyContent: "center",
     alignItems: "center",
-    width: "95%",
+    width: "100%",
     height: 120,
   },
 

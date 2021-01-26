@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
 
-import UserBar from '../button/userBar'
+import UserBar from "../button/userBar";
 
-import { getUserData } from '../../api/user';
-import { lightGrey } from '../../styles/color'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { getUserData } from "../../api/user";
+import { lightGrey } from "../../styles/color";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-import {defaultStyle} from '../../styles/index'
+import { defaultStyle } from "../../styles/index";
 
 export default function card({
   item = {},
-  onPostPress = () => { },
-  onUserPress = () => { },
+  onPostPress = () => {},
+  onUserPress = () => {},
 }) {
-  const [userData, setUserData] = useState({ name: '' })
+  const [userData, setUserData] = useState({ name: "" });
 
   useEffect(() => {
     getUserData(item.creator).then((snapshot) => {
@@ -22,47 +22,46 @@ export default function card({
         const data = snapshot.data();
         setUserData(data);
       }
-    })
-  }, [item.id])
+    });
+  }, [item.id]);
 
   return (
     <View style={styles.container}>
-
       <TouchableOpacity>
         <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.text} numberOfLines={3} >
+        <Text style={styles.text} numberOfLines={3}>
           {item.description}
         </Text>
       </TouchableOpacity>
 
       <UserBar
         name={userData.name}
-        image={require('../../assets/defaultPic.jpg')}
+        image={require("../../assets/defaultPic.jpg")}
         onPress={() => onUserPress(userData)}
       />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "white",
     flex: 1,
-    alignSelf: 'center',
-    width: '100%',
+    alignSelf: "center",
+    width: "100%",
     marginVertical: 10,
     height: 130,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     padding: 10,
 
-    ...defaultStyle.shadow
+    ...defaultStyle.shadow,
   },
 
   title: {
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
 
   text: {
-    color: lightGrey
-  }
-})
-
+    color: lightGrey,
+  },
+});

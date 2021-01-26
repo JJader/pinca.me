@@ -17,20 +17,20 @@ import { pink, lightGrey } from "../styles/color";
 import { defaultStyle } from "../styles/index";
 
 import Card from "../components/card/card";
-import FilterModal from '../components/modal/filterModal'
+import FilterModal from "../components/modal/filterModal";
 
 export default function feedScreen() {
   const [universityPosts, setUniversityPosts] = useState([]);
   const [personalPost, setPersonalPosts] = useState([]);
-  const [refreshing, setRefreshing] = useState(false)
-  const [filterText, setFilterText] = useState('FILTRAR')
+  const [refreshing, setRefreshing] = useState(false);
+  const [filterText, setFilterText] = useState("FILTRAR");
 
   useEffect(() => {
-    updatePosts()
+    updatePosts();
   }, []);
 
   function updatePosts() {
-    setRefreshing(true)
+    setRefreshing(true);
     getFeedPosts().then((snapshot) => {
       let posts = snapshot.docs.map((doc) => {
         const data = doc.data();
@@ -40,12 +40,12 @@ export default function feedScreen() {
 
       setUniversityPosts(posts);
       setPersonalPosts(posts);
-      setFilterText('FILTRAR')
-      setRefreshing(false)
+      setFilterText("FILTRAR");
+      setRefreshing(false);
     });
   }
 
-  const tryFilterPosts = (param, operator, value,text) => {
+  const tryFilterPosts = (param, operator, value, text) => {
     getFilterPosts(param, operator, value).then((snapshot) => {
       let posts = snapshot.docs.map((doc) => {
         const data = doc.data();
@@ -53,10 +53,10 @@ export default function feedScreen() {
         return { id, ...data };
       });
 
-      setFilterText(text)
+      setFilterText(text);
       setPersonalPosts(posts);
-    })
-  }
+    });
+  };
 
   return (
     <ScrollView
@@ -68,7 +68,6 @@ export default function feedScreen() {
         />
       }
     >
-
       <StatusBar backgroundColor="black" />
       <View style={[defaultStyle.container]}>
         <Text style={defaultStyle.title}>Explorar</Text>
@@ -76,7 +75,11 @@ export default function feedScreen() {
         <Text style={styles.text}>PROJETOS EM DESTAQUE</Text>
 
         <FlatList
-          style={{ flex: 1 , marginBottom: 60}}
+          style={{
+            flex: 1,
+            marginBottom: 15,
+            ...defaultStyle.shadow,
+          }}
           data={universityPosts}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
@@ -89,10 +92,7 @@ export default function feedScreen() {
           horizontal={true}
         />
 
-        <FilterModal
-          onFilter={tryFilterPosts}
-          text={filterText}
-        />
+        <FilterModal onFilter={tryFilterPosts} text={filterText} />
 
         {personalPost.map((item) => (
           <Card
@@ -112,7 +112,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
   },
-
-
-
 });
