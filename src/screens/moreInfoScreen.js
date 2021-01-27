@@ -1,4 +1,4 @@
-import React , {useCallback} from 'react'
+import React, { useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 
 import {
@@ -13,6 +13,7 @@ import {
 
 import LoadingButton from '../components/button/button';
 import UserBar from '../components/button/userBar';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import ShowList from '../components/list/showList'
 import { defaultStyle } from '../styles';
@@ -39,6 +40,10 @@ export default function moreInfoScreen({ navigation, route }) {
     navigation.navigate('feed', { update: true })
   }
 
+  function closeMoreInfo() {
+    navigation.goBack()
+  }
+
 
   return (
     <ScrollView contentContainerStyle={[
@@ -56,6 +61,14 @@ export default function moreInfoScreen({ navigation, route }) {
           resizeMode={"cover"}
           style={styles.image}
         >
+
+          <MaterialCommunityIcons
+            name="close-circle"
+            size={30}
+            color={pink}
+            style={{ alignSelf: 'flex-end', padding: 10 }}
+            onPress={() => (closeMoreInfo())}
+          />
 
         </ImageBackground>
       </View>
@@ -128,7 +141,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '150%',
     alignSelf: 'center',
-    justifyContent: 'flex-end'
+    //justifyContent: 'flex-end'
   },
 
   title: {

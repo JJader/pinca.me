@@ -58,7 +58,7 @@ export default function filterModal({
 
             <MaterialCommunityIcons
               name="close-circle"
-              size={24}
+              size={30}
               color={pink}
               style={{ alignSelf: 'flex-end' }}
               onPress={() => (onPressIcon())}
