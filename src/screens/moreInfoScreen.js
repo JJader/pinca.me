@@ -42,17 +42,17 @@ export default function moreInfoScreen({ navigation, route }) {
           resizeMode={"cover"}
           style={styles.image}
         >
+
         </ImageBackground>
       </View>
 
       <View style={styles.textView}>
-
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.type}>{type}</Text>
-
         <UserBar
           name={user.name}
         />
+        
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.type}>{type}</Text>
 
         <Text style={styles.description}>{description}</Text>
 
