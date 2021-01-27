@@ -133,7 +133,10 @@ export default function feedScreen({ navigation, route }) {
             key={item.id}
             item={item}
             onUserPress={(user) => alert(user.name)}
-            onPostPress={(post) => alert(post.title)}
+            onPostPress={(post, user) => {
+              navigation.navigate('moreinfo', { ...post, user })
+            }
+            }
           />
         ))}
       </View>
