@@ -46,7 +46,7 @@ export async function removeInterestedUser(userId, postId) {
     if (index != -1) {
       postData.interested.splice(index, 1)
       await updatePost(postId, postData);
-      alert("Você está desiscrito")
+      alert("Você não está mais inscrito")
     }
   } else {
     alert("Esse post não existe mais")

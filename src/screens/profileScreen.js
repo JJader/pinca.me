@@ -44,7 +44,7 @@ export default function profileScreen({ user, navigation }) {
   function getOtherUser(id) {
     getUserData(id).then((user) => {
       setUserData(user.data());
-      getPosts(user.data().projects);
+      getUserPosts(user.data().projects);
     });
   }
 
@@ -55,11 +55,11 @@ export default function profileScreen({ user, navigation }) {
       .doc(id)
       .onSnapshot((query) => {
         setUserData(query.data());
-        getPosts(query.data().projects);
+        getUserPosts(query.data().projects);
       });
   }
 
-  function getPosts(ids) {
+  function getUserPosts(ids) {
     getPosts(ids).then((snapshot) => {
       setPosts(snapshot);
     });

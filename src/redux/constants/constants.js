@@ -8,7 +8,11 @@ export const PROJECT_TYPE = [
   }, {
     id: 'Empresa junior',
     name: 'Empresa junior'
-  }, {
+  }, 
+  {
+    id: 'Laboratório de pesquisa',
+    name: 'Laboratório de pesquisa'
+  },  {
     id: 'Núcleo',
     name: 'Núcleo'
   }, {
