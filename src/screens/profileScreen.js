@@ -9,7 +9,7 @@ import {
   FlatList,
 } from "react-native";
 
-import { getUserPosts } from "../api/posts";
+import { getPosts } from "../api/posts";
 import { getUserData } from "../api/user";
 import { auth, database } from "../config/firebase";
 
@@ -60,7 +60,7 @@ export default function profileScreen({ user, navigation }) {
   }
 
   function getPosts(ids) {
-    getUserPosts(ids).then((snapshot) => {
+    getPosts(ids).then((snapshot) => {
       setPosts(snapshot);
     });
   }
