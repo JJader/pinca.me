@@ -1,4 +1,6 @@
-import React from 'react'
+import React , {useCallback} from 'react'
+import { useFocusEffect } from '@react-navigation/native'
+
 import {
   View,
   Text,
@@ -16,15 +18,27 @@ import ShowList from '../components/list/showList'
 import { defaultStyle } from '../styles';
 import { lightGrey, pink } from '../styles/color';
 
-defaultStyle
+import { auth } from '../config/firebase';
+import { addInterestedUser, removeInterestedUser } from '../api/posts'
 
 export default function moreInfoScreen({ navigation, route }) {
 
-  const { title, start, end, description, type, category } = route.params;
+  const { title, start, end, description, type, category, id, interested } = route.params;
   const { user } = route.params;
 
   const startText = new Date(Date(start));
   const endText = new Date(Date(end));
+
+  async function addInterested() {
+    await addInterestedUser(auth.currentUser.uid, id)
+    navigation.navigate('feed', { update: true })
+  }
+
+  async function removeInterested() {
+    await removeInterestedUser(auth.currentUser.uid, id)
+    navigation.navigate('feed', { update: true })
+  }
+
 
   return (
     <ScrollView contentContainerStyle={[
@@ -50,7 +64,7 @@ export default function moreInfoScreen({ navigation, route }) {
         <UserBar
           name={user.name}
         />
-        
+
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.type}>{type}</Text>
 
@@ -74,11 +88,24 @@ export default function moreInfoScreen({ navigation, route }) {
         />
 
       </View>
-      <LoadingButton
-        text={'Estou interessado'}
-        styleButton={styles.button}
-      />
-
+      {
+        interested.includes(auth.currentUser.uid) ?
+          (
+            <LoadingButton
+              text={'DESINSCREVER-SE'}
+              styleButton={[styles.button, { backgroundColor: 'grey' }]}
+              onPress={() => removeInterested().then()}
+            />
+          )
+          :
+          (
+            <LoadingButton
+              text={'INSCREVER-SE'}
+              styleButton={styles.button}
+              onPress={() => addInterested().then()}
+            />
+          )
+      }
     </ScrollView>
   )
 }

@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useFocusEffect } from '@react-navigation/native'
+
 import {
   View,
   Text,
@@ -9,17 +11,16 @@ import {
   RefreshControl,
 } from "react-native";
 
+
 import BigCard from "../components/card/bigPostCard";
-
-import { getFeedPosts, getFilterPosts } from "../api/posts";
-
-import { pink, lightGrey } from "../styles/color";
-import { defaultStyle } from "../styles/index";
-
 import Card from "../components/card/card";
 import FilterModal from "../components/modal/filterModal";
 
-export default function feedScreen({ navigation }) {
+import { getFeedPosts, getFilterPosts } from "../api/posts";
+
+import { defaultStyle } from "../styles/index";
+
+export default function feedScreen({ navigation, route }) {
   const [universityPosts, setUniversityPosts] = useState([]);
   const [personalPost, setPersonalPosts] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -29,6 +30,15 @@ export default function feedScreen({ navigation }) {
     updatePosts();
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      if (route.params && route.params.update) {
+        updatePosts();
+        navigation.setParams({ update: false })
+      }
+    }, [route.params && route.params.update])
+  )
+
   function updatePosts() {
     setRefreshing(true);
 
@@ -36,7 +46,6 @@ export default function feedScreen({ navigation }) {
     updateUniversityPosts();
 
     setRefreshing(false);
-
   }
 
   function updatePersonalPosts() {
@@ -105,7 +114,7 @@ export default function feedScreen({ navigation }) {
               item={item}
               onUserPress={(user) => alert(user.name)}
               onPostPress={(post, user) => {
-                navigation.navigate('moreinfo', { ...post, user})
+                navigation.navigate('moreinfo', { ...post, user })
               }
               }
             />
