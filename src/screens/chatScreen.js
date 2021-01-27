@@ -11,7 +11,7 @@ import { database, auth } from '../config/firebase'
 
 LogBox.ignoreAllLogs(true)
 
-export default function chatScreen(destinataryId, { navigation }) {
+export default function chatScreen({ navigation, route }) {
   const [user, setUser] = useState(null)
   const [name, setName] = useState('')
   const [messages, setMessages] = useState([])
@@ -21,7 +21,6 @@ export default function chatScreen(destinataryId, { navigation }) {
   const chatsRef = database.collection('chats').doc('123').collection(creatChatId())
 
   useEffect(() => {
-
     creatChatId()
     readUser()
     const unsubscribe = chatsRef.onSnapshot((querySnapshot) => {
@@ -40,10 +39,10 @@ export default function chatScreen(destinataryId, { navigation }) {
 
   function creatChatId() {
     const userID = auth.currentUser.uid
-    const destinataryID = 'AyHvS5TdhZgFnsokJO8woJmgyCW2';
+    const destinataryId = route.params ? route.params.destinataryId : auth.currentUser.uid;
     const chatIDpre = [];
     chatIDpre.push(userID);
-    chatIDpre.push(destinataryID);
+    chatIDpre.push(destinataryId);
     chatIDpre.sort();
     return chatIDpre.join('_')
   }
@@ -90,13 +89,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 30,
-  },
-  input: {
-    height: 50,
-    width: '100%',
-    borderWidth: 1,
-    padding: 15,
-    marginBottom: 20,
-    borderColor: 'green',
   },
 })

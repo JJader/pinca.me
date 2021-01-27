@@ -30,7 +30,7 @@ export default function search({ navigation }) {
           const data = doc.data()
           const id = doc.id
           const close = () => { return closeModal() }
-          const talk = () => { return talkWithMe() }
+          const talk = () => { return talkWithMe(id) }
           return { id, talk, close, ...data }
         })
         setUsers(users)
@@ -50,8 +50,8 @@ export default function search({ navigation }) {
     );
   }
 
-  function talkWithMe() {
-    navigation.navigate('chat')
+  function talkWithMe(destinataryId) {
+    navigation.navigate('chat', { destinataryId })
     closeModal()
   }
 
@@ -68,7 +68,7 @@ export default function search({ navigation }) {
   return (
     <View style={defaultStyle.container}>
       <Text style={defaultStyle.title}>Search</Text>
-      
+
       <TextInput
         style={defaultStyle.input}
         onChangeText={searchUser}
