@@ -1,58 +1,69 @@
 // @refresh reset
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
+
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-community/async-storage'
-import { StyleSheet, TextInput, View, LogBox, Button, FlatList, text }
-  from 'react-native'
-
 import { getUserData } from '../api/user'
 import { database, auth } from '../config/firebase'
 
-LogBox.ignoreAllLogs(true)
+import { StyleSheet } from 'react-native'
+
+//LogBox.ignoreAllLogs(true)
+
+var chatsRef;
 
 export default function chatScreen({ navigation, route }) {
   const [user, setUser] = useState(null)
-  const [name, setName] = useState('')
   const [messages, setMessages] = useState([])
 
+  useFocusEffect(
+    useCallback(() => {
+      const chatId = creatChatId()
 
+      chatsRef = database
+        .collection('chats')
+        .doc('privateChat')
+        .collection(chatId)
 
-  const chatsRef = database.collection('chats').doc('123').collection(creatChatId())
+      readUser()
 
-  useEffect(() => {
-    creatChatId()
-    readUser()
-    const unsubscribe = chatsRef.onSnapshot((querySnapshot) => {
-      const messagesFirestore = querySnapshot
-        .docChanges()
-        .filter(({ type }) => type === 'added')
-        .map(({ doc }) => {
-          const message = doc.data()
-          return { ...message, createdAt: message.createdAt.toDate() }
-        })
-        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      appendMessages(messagesFirestore)
-    })
-    return () => unsubscribe()
-  }, [])
+      const unsubscribe = chatsRef
+        .orderBy('createdAt', 'desc')
+        .onSnapshot(
+          (querySnapshot) => {
+            const messagesFirestore = []
+
+            querySnapshot.forEach((doc) => {
+              const message = doc.data()
+              const createdAt = message.createdAt.toDate()
+              messagesFirestore.push({
+                ...message,
+                createdAt: createdAt,
+              })
+            })
+
+            setMessages(messagesFirestore)
+          })
+
+      return () => {
+        navigation.setParams({ destinataryId: null })
+        unsubscribe()
+      }
+    }, [route.params && route.params.destinataryId])
+  )
 
   function creatChatId() {
     const userID = auth.currentUser.uid
-    const destinataryId = route.params ? route.params.destinataryId : auth.currentUser.uid;
+    const destinataryId =
+      route.params ? route.params.destinataryId ? route.params.destinataryId : auth.currentUser.uid : auth.currentUser.uid;
     const chatIDpre = [];
     chatIDpre.push(userID);
     chatIDpre.push(destinataryId);
     chatIDpre.sort();
     return chatIDpre.join('_')
   }
-
-  const appendMessages = useCallback(
-    (messages) => {
-      setMessages((previousMessages) => GiftedChat.append(previousMessages, messages))
-    },
-    [messages]
-  )
 
   async function readUser() {
     const user = await AsyncStorage.getItem('user')
@@ -79,7 +90,13 @@ export default function chatScreen({ navigation, route }) {
   }
 
 
-  return < GiftedChat messages={messages} user={user} onSend={handleSend} />
+  return (
+    < GiftedChat
+      messages={messages}
+      user={user}
+      onSend={handleSend}
+    />
+  )
 }
 
 const styles = StyleSheet.create({
