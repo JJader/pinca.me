@@ -24,7 +24,7 @@ import { addInterestedUser, removeInterestedUser } from '../api/posts'
 
 export default function moreInfoScreen({ navigation, route }) {
 
-  const { title, start, end, description, type, category, id, interested } = route.params;
+  const { title, start, end, description, type, category, id, interested, creator } = route.params;
   const { user } = route.params;
 
   const startText = new Date(Date(start));
@@ -43,7 +43,6 @@ export default function moreInfoScreen({ navigation, route }) {
   function closeMoreInfo() {
     navigation.goBack()
   }
-
 
   return (
     <ScrollView contentContainerStyle={[
@@ -102,22 +101,33 @@ export default function moreInfoScreen({ navigation, route }) {
 
       </View>
       {
-        interested.includes(auth.currentUser.uid) ?
+        creator == auth.currentUser.uid ?
           (
             <LoadingButton
-              text={'DESINSCREVER-SE'}
-              styleButton={[styles.button, { backgroundColor: 'grey' }]}
-              onPress={() => removeInterested().then()}
+              text={'EDITAR'}
+              styleButton={styles.button}
+              onPress={() => navigation
+                .navigate('editpost', { ...route.params })
+              }
             />
           )
           :
-          (
-            <LoadingButton
-              text={'INSCREVER-SE'}
-              styleButton={styles.button}
-              onPress={() => addInterested().then()}
-            />
-          )
+          interested.includes(auth.currentUser.uid) ?
+            (
+              <LoadingButton
+                text={'DESINSCREVER-SE'}
+                styleButton={[styles.button, { backgroundColor: 'grey' }]}
+                onPress={() => removeInterested().then()}
+              />
+            )
+            :
+            (
+              <LoadingButton
+                text={'INSCREVER-SE'}
+                styleButton={styles.button}
+                onPress={() => addInterested().then()}
+              />
+            )
       }
     </ScrollView>
   )
