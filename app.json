@@ -1,9 +1,9 @@
 {
-  "name": "final",
-  "displayName": "final",
+  "name": "PincaMe",
+  "displayName": "PincaMe",
   "expo": {
-    "name": "final",
-    "slug": "final",
+    "name": "PincaMe",
+    "slug": "PincaMe",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"

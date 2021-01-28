@@ -52,7 +52,7 @@ export default function editScreen({ navigation }) {
       setBio(userData.data().bio);
       setCourse(userData.data().course);
       setUniversity(userData.data().university);
-      // setCategory(userData.data().category);
+      setCategory(userData.data().category);
       setPicture(userData.data().picture);
     });
   }, []);
