@@ -19,8 +19,8 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function bigCard({
   item = {},
-  onPostPress = () => { },
-  onUserPress = () => { },
+  onPostPress = () => {},
+  onUserPress = () => {},
 }) {
   const [userData, setUserData] = useState({ name: "" });
 
@@ -37,7 +37,6 @@ export default function bigCard({
         style={{ flex: 2 }}
         onPress={() => onPostPress(item, userData)}
       >
-
         <Image
           source={{
             uri: "https://picsum.photos/seed/" + Math.random() + "/500/500",
@@ -57,7 +56,7 @@ export default function bigCard({
 
       <UserBar
         name={userData.name}
-        image={require("../../assets/defaultPic.jpg")}
+        image={userData.picture}
         style={{ flex: 1 / 4, padding: 10 }}
         onPress={() => onUserPress(userData)}
       />

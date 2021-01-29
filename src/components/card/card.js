@@ -11,8 +11,8 @@ import { defaultStyle } from "../../styles/index";
 
 export default function card({
   item = {},
-  onPostPress = () => { },
-  onUserPress = () => { },
+  onPostPress = () => {},
+  onUserPress = () => {},
 }) {
   const [userData, setUserData] = useState({ name: "" });
 
@@ -27,9 +27,7 @@ export default function card({
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => (onPostPress(item, userData))}
-      >
+      <TouchableOpacity onPress={() => onPostPress(item, userData)}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.text} numberOfLines={3}>
           {item.description}
@@ -38,7 +36,7 @@ export default function card({
 
       <UserBar
         name={userData.name}
-        image={require("../../assets/defaultPic.jpg")}
+        image={userData.picture}
         onPress={() => onUserPress(userData)}
       />
     </View>

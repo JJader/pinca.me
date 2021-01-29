@@ -12,8 +12,8 @@ import {
 import { searchByName } from "../api/user";
 import ProfileScreen from "./profileScreen";
 
-import { defaultStyle } from '../styles/index'
-import { lightGrey } from '../styles/color'
+import { defaultStyle } from "../styles/index";
+import { lightGrey } from "../styles/color";
 import UserBar from "../components/button/userBar";
 
 export default function search({ navigation }) {
@@ -27,32 +27,32 @@ export default function search({ navigation }) {
     } else {
       searchByName(search).then((snapshot) => {
         let users = snapshot.docs.map((doc) => {
-          const data = doc.data()
-          const id = doc.id
-          const close = () => { return closeModal() }
-          const talk = () => { return talkWithMe(id) }
-          return { id, talk, close, ...data }
-        })
-        setUsers(users)
-      })
+          const data = doc.data();
+          const id = doc.id;
+          const close = () => {
+            return closeModal();
+          };
+          const talk = () => {
+            return talkWithMe(id);
+          };
+          return { id, talk, close, ...data };
+        });
+        setUsers(users);
+      });
     }
   };
 
   function ProfileModal() {
     return (
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={isFind}
-      >
+      <Modal animationType="slide" transparent={false} visible={isFind}>
         <ProfileScreen user={userFound} />
       </Modal>
     );
   }
 
   function talkWithMe(destinataryId) {
-    navigation.navigate('chat', { destinataryId })
-    closeModal()
+    navigation.navigate("chat", { destinataryId });
+    closeModal();
   }
 
   function closeModal() {
@@ -82,6 +82,7 @@ export default function search({ navigation }) {
           <UserBar
             name={item.name}
             email={item.email}
+            image={item.picture}
             styleText={{ fontSize: 18 }}
             style={{ marginTop: 30 }}
             onPress={() => clickOnUser(item)}

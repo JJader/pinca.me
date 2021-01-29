@@ -15,6 +15,7 @@ import { auth, database } from "../config/firebase";
 
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { Avatar } from "react-native-elements";
 import { singOut } from "../api/login";
 
 import defaultPic from "../assets/defaultPic.jpg";
@@ -49,7 +50,6 @@ export default function profileScreen({ user, navigation }) {
   }
 
   function getCurrentUser(id) {
-    // Depois penso em uma forma mais eficiente de fazer isso
     unsubscribeUser = database
       .collection("users")
       .doc(id)
@@ -88,10 +88,16 @@ export default function profileScreen({ user, navigation }) {
           />
         )}
         <View style={styles.profileTab}>
-          <Image style={styles.profilePic} source={defaultPic} />
-
+          <Avatar rounded source={{ uri: userData.picture }} size="xlarge" />
           <View style={styles.profileInfo}>
-            <View style={{ alignItems: "center", flexDirection: "row" }}>
+            <View
+              style={{
+                alignSelf: "center",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+              }}
+            >
               <Text style={styles.textName}>{userData.name}</Text>
               {isCurrentUser ? (
                 <Ionicons
@@ -145,7 +151,7 @@ export default function profileScreen({ user, navigation }) {
           </View>
         </View>
         <View style={styles.descriptionTab}>
-          <Text>{userData.bio}</Text>
+          <Text style={{ textAlign: "justify" }}>{userData.bio}</Text>
         </View>
 
         <View
@@ -155,7 +161,7 @@ export default function profileScreen({ user, navigation }) {
           }}
         >
           <Text style={{ marginTop: 5, marginBottom: 5 }}>
-            Áreas de interesse
+            Áreas de interesse:
           </Text>
           <FlatList
             horizontal={true}
@@ -166,8 +172,8 @@ export default function profileScreen({ user, navigation }) {
         </View>
 
         <View style={{ width: "100%", alignItems: "center" }}>
-          <Text style={{ marginTop: 10, marginBottom: 10 }}>
-            Projetos realizados
+          <Text style={{ marginTop: 15, marginBottom: 1 }}>
+            Projetos realizados:
           </Text>
 
           {posts.map((item) => (
@@ -199,16 +205,15 @@ const styles = StyleSheet.create({
   },
 
   profilePic: {
-    marginLeft: 15,
+    marginTop: 10,
+    marginLeft: 5,
     height: 140,
     width: 140,
     borderRadius: 70,
   },
 
   profileTab: {
-    position: "absolute",
-    top: 50,
-    left: -8,
+    marginTop: 30,
     flexDirection: "row",
   },
 
@@ -246,8 +251,8 @@ const styles = StyleSheet.create({
   },
 
   descriptionTab: {
-    backgroundColor: "#FAF6F6",
-    marginTop: 200,
+    backgroundColor: "white",
+    marginTop: 5,
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
@@ -255,7 +260,7 @@ const styles = StyleSheet.create({
   },
 
   backButton: {
-    marginTop: 15,
+    marginTop: 25,
     marginRight: 320,
   },
 });
