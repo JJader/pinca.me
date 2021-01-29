@@ -66,7 +66,7 @@ export default function chatScreen({ navigation, route }) {
   async function readUser() {
     const user = await AsyncStorage.getItem('user')
 
-    if (user) {
+    if (user && user.id == auth.currentUser.uid) {
       setUser(JSON.parse(user))
     }
     else {
