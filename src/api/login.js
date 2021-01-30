@@ -13,6 +13,7 @@ export async function registration(email, password, data) {
         course: "",
         picture: "",
         projects: [],
+        chats:[],
         email: email,
         ...data,
       });

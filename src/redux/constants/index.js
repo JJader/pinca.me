@@ -1,6 +1,6 @@
-import {PROJECT_TYPE} from './constants'
+import {PROJECT_TYPE, CATEGORY} from './constants'
 
 export{
   PROJECT_TYPE,
-  
+  CATEGORY,
 }

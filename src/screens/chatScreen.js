@@ -5,14 +5,14 @@ import { useFocusEffect } from '@react-navigation/native'
 
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-community/async-storage'
-import { getUserData } from '../api/user'
+import { addChatToUser, getUserData } from '../api/user'
 import { database, auth } from '../config/firebase'
 
 import { StyleSheet } from 'react-native'
 
 var chatsRef;
 
-export default function chatScreen({ navigation, route }) {
+export default function chatScreen({ navigation, route }, chatId) {
   const [user, setUser] = useState(null)
   const [messages, setMessages] = useState([])
 
@@ -32,6 +32,10 @@ export default function chatScreen({ navigation, route }) {
         .onSnapshot(
           (querySnapshot) => {
             const messagesFirestore = []
+
+            if (querySnapshot.docs.length == 1) {
+              addChatToUser(chatId).then()
+            }
 
             querySnapshot.forEach((doc) => {
               const message = doc.data()

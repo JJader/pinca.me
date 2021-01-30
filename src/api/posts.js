@@ -99,6 +99,17 @@ export async function getPosts(ids) {
   }
 }
 
+export async function deletPosts(id) {
+  try {
+    await database
+      .collection("posts")
+      .doc(id)
+      .delete()
+  } catch (err) {
+    console.log("erro em updatePost" + err.message);
+  }
+}
+
 export async function updatePost(id, data) {
   try {
     await database

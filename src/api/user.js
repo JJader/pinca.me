@@ -33,3 +33,23 @@ export async function searchByName(name) {
     console.log("error in searchByname");
   }
 }
+
+export async function addChatToUser(chatId) {
+  const users = chatId.split('_')
+  const user0Data = await getUserData(users[0])
+  const user1Data = await getUserData(users[1])
+
+  let chats0 = user0Data.data().chats
+  let chats1 = user1Data.data().chats
+
+  if (chats0.indexOf(chatId) === -1) {
+    chats0.push(chatId)
+    await updateUser(users[0], { chats: chats0 })
+  }
+
+  if (chats1.indexOf(chatId) === -1) {
+    chats1.push(chatId)
+    await updateUser(users[1], { chats: chats1 })
+  }
+
+}

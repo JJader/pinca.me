@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from 'react-native'
 
-import { createPostData, updatePost } from '../api/posts'
+import { createPostData, updatePost, deletPosts } from '../api/posts'
 import { pink, lightGrey } from '../styles/color'
 import { defaultStyle } from '../styles/index'
 
@@ -21,22 +21,7 @@ import SelectList from '../components/list/selectList'
 import PickerList from '../components/list/pickerList'
 import Checkbox from '../components/button/checkbox'
 
-import { PROJECT_TYPE } from '../redux/constants/index'
-
-const items = [{
-  id: '1',
-  name: 'Engenharia de computação'
-}, {
-  id: '2',
-  name: 'Engenharia de produção'
-}, {
-  id: '3',
-  name: 'Engenharia elétrica'
-}, {
-  id: '4',
-  name: 'Sistema de informação'
-}
-];
+import { PROJECT_TYPE, CATEGORY } from '../redux/constants/index'
 
 const now = new Date(Date.now());
 const CREATE_TITLE = 'CRIAR PROJETO';
@@ -193,7 +178,7 @@ export default function createPostScreen({
           text='Categorias'
           inputText='Procurar'
           buttonText='Ok'
-          data={items}
+          data={CATEGORY}
           dataSelected={category}
           onItemsChange={setCategory}
           buttonColor={pink}
