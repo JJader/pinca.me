@@ -4,19 +4,19 @@ import {
   Text,
   TextInput,
   FlatList,
-  StyleSheet,
   Modal,
   TouchableOpacity,
 } from "react-native";
 
 import { searchByName } from "../api/user";
 import ProfileScreen from "./profileScreen";
+import { pink } from "../styles/color";
 
 import { defaultStyle } from "../styles/index";
-import { lightGrey } from "../styles/color";
 import UserBar from "../components/button/userBar";
+import { auth } from "../config/firebase";
 
-export default function search({ navigation }) {
+export default function search({ user, navigation }) {
   const [users, setUsers] = useState([]);
   const [userFound, setUserFound] = useState("");
   const [isFind, setIsFind] = useState(false);
@@ -45,7 +45,7 @@ export default function search({ navigation }) {
   function ProfileModal() {
     return (
       <Modal animationType="slide" transparent={false} visible={isFind}>
-        <ProfileScreen user={userFound} />
+        <ProfileScreen user={userFound}></ProfileScreen>
       </Modal>
     );
   }
@@ -90,7 +90,66 @@ export default function search({ navigation }) {
         )}
       />
 
-      <ProfileModal />
+      {auth.currentUser.uid === userFound.id ? (
+        <Modal animationType="slide" transparent={true} visible={isFind}>
+          <View
+            style={{
+              marginTop: 200,
+              height: 100,
+              width: 350,
+              borderRadius: 5,
+              backgroundColor: pink,
+              alignItems: "center",
+              alignSelf: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text
+              style={{
+                color: "white",
+                fontSize: 18,
+              }}
+            >
+              Este é você! Visualizar seu perfil?
+            </Text>
+            <View
+              style={{
+                marginTop: 15,
+                flexDirection: "row",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: "bold",
+                  color: "black",
+                }}
+                onPress={() => {
+                  closeModal();
+                  navigation.navigate("profile");
+                }}
+              >
+                SIM
+              </Text>
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: "bold",
+                  marginLeft: 50,
+                  color: "black",
+                }}
+                onPress={() => {
+                  closeModal();
+                }}
+              >
+                NÃO
+              </Text>
+            </View>
+          </View>
+        </Modal>
+      ) : (
+        <ProfileModal />
+      )}
     </View>
   );
 }

@@ -24,6 +24,7 @@ import { defaultStyle } from "../styles/index";
 import { pink } from "../styles/color";
 
 var unsubscribeUser;
+let currentUser;
 
 export default function profileScreen({ user, navigation }) {
   const [posts, setPosts] = useState([]);
@@ -31,8 +32,7 @@ export default function profileScreen({ user, navigation }) {
   const [userData, setUserData] = useState("");
 
   useEffect(() => {
-    let currentUser = auth.currentUser.uid;
-
+    currentUser = auth.currentUser.uid;
     if (user && user.id != currentUser) {
       setIsCurrentUser(false);
       getOtherUser(user.id);
@@ -87,6 +87,7 @@ export default function profileScreen({ user, navigation }) {
             }}
           />
         )}
+
         <View style={styles.profileTab}>
           <Avatar rounded source={{ uri: userData.picture }} size="xlarge" />
           <View style={styles.profileInfo}>
