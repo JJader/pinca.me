@@ -8,7 +8,8 @@ import FirstScreen from "./firstScreen";
 import ChatScreen from "./chatScreen";
 import EditScreen from "./editScreen";
 import MoreInfoScreen from "./moreInfoScreen";
-import EditPostScreen from './editPostScree'
+import EditPostScreen from './editPostScree';
+import ChatScreenList from './chatScreenList'
 
 export {
   LoginScreen,
@@ -19,6 +20,7 @@ export {
   ProfileScreen,
   FirstScreen,
   ChatScreen,
+  ChatScreenList,
   EditScreen,
   MoreInfoScreen,
   EditPostScreen,
