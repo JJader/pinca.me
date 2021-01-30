@@ -5,6 +5,7 @@ import MultiSelect from 'react-native-multiple-select';
 export default function SelectList({
   onItemsChange = () => { },
   data = [],
+  dataSelected = [],
   text = 'Click  here',
   inputText = 'Search',
   buttonColor = '#CCC',
@@ -12,9 +13,10 @@ export default function SelectList({
   style,
   displayKey = 'name',
   uniqueKey = 'id',
+  canAddItems = false,
 }) {
 
-  const [selectedItems, setSelectedItems] = useState([])
+  const [selectedItems, setSelectedItems] = useState(dataSelected)
   const [multiSelect, SetMultiSelect] = useState(null)
 
   const onSelectedItemsChange = (selectedItems) => {
@@ -98,7 +100,7 @@ export default function SelectList({
         searchInputStyle={{ color: '#CCC' }}
         submitButtonColor={buttonColor}
         submitButtonText={buttonText}
-        canAddItems={true}
+        canAddItems={canAddItems}
         onAddItem={(item) => (addNewItens(item))}
       />
       <View>

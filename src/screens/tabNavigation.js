@@ -11,7 +11,6 @@ import {
   ChatScreen,
   ChatScreenList,
   MoreInfoScreen,
-  EditPostScreen
 } from "./index";
 
 const Tab = createBottomTabNavigator();
@@ -86,15 +85,6 @@ export default function App() {
       <Tab.Screen
         name="moreinfo"
         component={MoreInfoScreen}
-        options={{
-          tabBarButton: () => null,
-          tabBarVisible: false,
-          title: () => null,
-        }}
-      />
-      <Tab.Screen
-        name="editpost"
-        component={EditPostScreen}
         options={{
           tabBarButton: () => null,
           tabBarVisible: false,

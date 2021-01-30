@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
+
 import {
   StatusBar,
   StyleSheet,
@@ -8,10 +10,11 @@ import {
   ScrollView,
 } from 'react-native'
 
-import { createPostData } from '../api/posts'
+import { createPostData, updatePost } from '../api/posts'
 import { pink, lightGrey } from '../styles/color'
 import { defaultStyle } from '../styles/index'
 
+import UserList from '../components/list/userList'
 import DatePicker from '../components/list/datePicker'
 import LoadingButton from '../components/button/loadingButton'
 import SelectList from '../components/list/selectList'
@@ -35,9 +38,14 @@ const items = [{
 }
 ];
 
-const now = new Date(Date.now())
+const now = new Date(Date.now());
+const CREATE_TITLE = 'CRIAR PROJETO';
+const EDITE_TITLE = 'EDITAR PROJETO'
 
-export default function createPostScreen({ navigation: { navigate } }) {
+export default function createPostScreen({
+  navigation: { navigate, setParams },
+  route
+}) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [start, setStart] = useState(now)
@@ -45,9 +53,65 @@ export default function createPostScreen({ navigation: { navigate } }) {
   const [category, setCategory] = useState([])
   const [isPaid, setIsPaid] = useState(false)
   const [type, setType] = useState(false)
+  const [collaborators, setCollaborators] = useState([])
+  const [interested, setInterested] = useState([])
+  const [screenName, setScreenName] = useState(CREATE_TITLE)
+
+  useFocusEffect(
+    useCallback(() => {
+      if (route.params && route.params.post) {
+        const post = route.params.post;
+        setScreenName(EDITE_TITLE)
+        setTitle(post.title)
+        setDescription(post.description)
+        setStart(post.start)
+        setEnd(post.end)
+        setCategory(post.category)
+        setIsPaid(post.isPaid)
+        setType(post.type)
+        setInterested(post.interested)
+        setCollaborators(post.collaborators)
+
+      }
+
+      return () => {
+        setParams({ post: null })
+        restoreScreen()
+      }
+    }, [route.params && route.params.post])
+  )
+
+  function onPressButton() {
+    if (screenName == CREATE_TITLE) {
+      createPost().then()
+    }
+    else if (screenName == EDITE_TITLE) {
+      editePost()
+    }
+  }
 
   async function createPost() {
-    const data = {
+    const data = returnData();
+
+    await createPostData(data).then(() => {
+      restoreScreen()
+      navigate('feed')
+    })
+  };
+
+  function editePost() {
+    const { id } = route.params.post
+    const data = returnData()
+
+    updatePost(id, { collaborators, ...data })
+      .then(() => {
+        restoreScreen()
+        navigate('feed')
+      })
+  }
+
+  function returnData() {
+    return {
       title,
       description,
       start,
@@ -56,22 +120,26 @@ export default function createPostScreen({ navigation: { navigate } }) {
       isPaid,
       type,
     }
+  }
 
-    await createPostData(data).then(() => {
-      setTitle('')
-      setDescription('')
-      setStart('')
-      setEnd('')
-      setCategory('')
-      navigate('feed')
-    })
-  };
+  function restoreScreen() {
+    setTitle('')
+    setDescription('')
+    setStart(now)
+    setEnd(now)
+    setCategory([])
+    setIsPaid(false)
+    setType(false)
+    setInterested([])
+    setCollaborators([])
+    setScreenName(CREATE_TITLE)
+  }
 
   return (
     <ScrollView contentContainerStyle={defaultStyle.scrollView} >
       <StatusBar backgroundColor='black' />
       <View style={defaultStyle.container}>
-        <Text style={defaultStyle.title}>Create project</Text>
+        <Text style={defaultStyle.title}>{screenName}</Text>
 
         <TextInput
           style={defaultStyle.input}
@@ -82,6 +150,7 @@ export default function createPostScreen({ navigation: { navigate } }) {
 
         <PickerList
           data={PROJECT_TYPE}
+          initialItem={type}
           text={'Tipo'}
           style={defaultStyle.input}
           iconColor={pink}
@@ -125,15 +194,30 @@ export default function createPostScreen({ navigation: { navigate } }) {
           inputText='Procurar'
           buttonText='Ok'
           data={items}
+          dataSelected={category}
           onItemsChange={setCategory}
           buttonColor={pink}
+          canAddItems={true}
         />
-
+        {
+          screenName != EDITE_TITLE ? null :
+            <UserList
+              style={[defaultStyle.input, styles.selectList]}
+              text='Participantes'
+              inputText='Procurar'
+              buttonText='Ok'
+              data={interested}
+              dataSelected={collaborators}
+              onItemsChange={setCollaborators}
+              buttonColor={pink}
+              canAddItems={false}
+            />
+        }
         <LoadingButton
-          text={'CRIAR PROJETO'}
+          text={screenName}
           styleButton={defaultStyle.button}
           styleText={{ color: 'white' }}
-          onPress={() => createPost().then()}
+          onPress={() => onPressButton()}
         />
       </View>
     </ScrollView>

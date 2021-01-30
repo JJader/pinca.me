@@ -53,6 +53,23 @@ export async function removeInterestedUser(userId, postId) {
   }
 }
 
+export async function getInterestedList(ids) {
+  let users = []
+
+  for (let i = 0; i < ids.length; i++) {
+    const user = await getUserData(ids[i])
+
+    if (!user.error) {
+      let item = {
+        id: ids[i],
+        name: user.data().name
+      }
+      users.push(item)
+    }
+  }
+  return users
+}
+
 export async function getPosts(ids) {
   try {
     let list = [];

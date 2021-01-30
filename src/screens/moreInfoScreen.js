@@ -107,7 +107,7 @@ export default function moreInfoScreen({ navigation, route }) {
               text={'EDITAR'}
               styleButton={styles.button}
               onPress={() => navigation
-                .navigate('editpost', { ...route.params })
+                .navigate('create', { post:route.params })
               }
             />
           )
