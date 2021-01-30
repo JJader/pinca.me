@@ -11,14 +11,21 @@ import { database, auth } from '../config/firebase'
 import { StyleSheet } from 'react-native'
 
 var chatsRef;
+var chatId;
 
-export default function chatScreen({ navigation, route }, chatId) {
+export default function chatScreen({ navigation, route }) {
   const [user, setUser] = useState(null)
   const [messages, setMessages] = useState([])
 
   useFocusEffect(
     useCallback(() => {
-      const chatId = creatChatId()
+
+
+      if (route.params && route.params.chatId) {
+        chatId = route.params.chatId
+      } else {
+        chatId = creatChatId()
+      }
 
       chatsRef = database
         .collection('chats')
@@ -38,9 +45,7 @@ export default function chatScreen({ navigation, route }, chatId) {
             }
 
             querySnapshot.forEach((doc) => {
-              const message = doc.data()
-              const createdAt = message.createdAt.toDate()
-              messagesFirestore.push({
+              route.params && route.params.chatIdmessagesFirestore.push({
                 ...message,
                 createdAt: createdAt,
               })
@@ -50,10 +55,10 @@ export default function chatScreen({ navigation, route }, chatId) {
           })
 
       return () => {
-        navigation.setParams({ destinataryId: null })
+        navigation.setParams({ destinataryId: null, chatId: null })
         unsubscribe()
       }
-    }, [route.params && route.params.destinataryId])
+    }, [route.params && route.params.destinataryId, route.params && route.params.chatId])
   )
 
   function creatChatId() {
