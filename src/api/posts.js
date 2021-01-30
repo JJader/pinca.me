@@ -106,7 +106,10 @@ export async function deletPosts(id) {
       .doc(id)
       .delete()
   } catch (err) {
-    console.log("erro em updatePost" + err.message);
+    console.log("erro em deletPosts" + err.message);
+    return {
+      error: err.message
+    }
   }
 }
 

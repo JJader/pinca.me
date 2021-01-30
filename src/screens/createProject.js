@@ -66,33 +66,55 @@ export default function createPostScreen({
     }, [route.params && route.params.post])
   )
 
-  function onPressButton() {
+  function restoreScreen() {
+    setTitle('')
+    setDescription('')
+    setStart(now)
+    setEnd(now)
+    setCategory([])
+    setIsPaid(false)
+    setType(false)
+    setInterested([])
+    setCollaborators([])
+    setScreenName(CREATE_TITLE)
+  }
+
+  async function onPressButton() {
     if (screenName == CREATE_TITLE) {
-      createPost().then()
+      await tryCreatePostData()
     }
     else if (screenName == EDITE_TITLE) {
-      editePost()
+      await tryUpdatePost()
     }
   }
 
-  async function createPost() {
+  async function tryCreatePostData() {
     const data = returnData();
 
     await createPostData(data).then(() => {
-      restoreScreen()
       navigate('feed')
     })
   };
 
-  function editePost() {
+  async function tryUpdatePost() {
     const { id } = route.params.post
     const data = returnData()
 
-    updatePost(id, { collaborators, ...data })
-      .then(() => {
-        restoreScreen()
-        navigate('feed')
-      })
+    await updatePost(id, { collaborators, ...data })
+    navigate('feed')
+
+  }
+
+  async function tryDeletPost() {
+    const { id } = route.params.post
+    const confirmation = await deletPosts(id);
+
+    if (confirmation && confirmation.error) {
+      alert(confirmation.error)
+    }
+    else {
+      navigate('feed')
+    }
   }
 
   function returnData() {
@@ -105,19 +127,6 @@ export default function createPostScreen({
       isPaid,
       type,
     }
-  }
-
-  function restoreScreen() {
-    setTitle('')
-    setDescription('')
-    setStart(now)
-    setEnd(now)
-    setCategory([])
-    setIsPaid(false)
-    setType(false)
-    setInterested([])
-    setCollaborators([])
-    setScreenName(CREATE_TITLE)
   }
 
   return (
@@ -184,19 +193,18 @@ export default function createPostScreen({
           buttonColor={pink}
           canAddItems={true}
         />
-        {
-          screenName != EDITE_TITLE ? null :
-            <UserList
-              style={[defaultStyle.input, styles.selectList]}
-              text='Participantes'
-              inputText='Procurar'
-              buttonText='Ok'
-              data={interested}
-              dataSelected={collaborators}
-              onItemsChange={setCollaborators}
-              buttonColor={pink}
-              canAddItems={false}
-            />
+        {screenName != EDITE_TITLE ? null :
+          <UserList
+            style={[defaultStyle.input, styles.selectList]}
+            text='Participantes'
+            inputText='Procurar'
+            buttonText='Ok'
+            data={interested}
+            dataSelected={collaborators}
+            onItemsChange={setCollaborators}
+            buttonColor={pink}
+            canAddItems={false}
+          />
         }
         <LoadingButton
           text={screenName}
@@ -204,6 +212,15 @@ export default function createPostScreen({
           styleText={{ color: 'white' }}
           onPress={() => onPressButton()}
         />
+
+        {screenName != EDITE_TITLE ? null :
+          <LoadingButton
+            text={"EXCLUIR PROJETO"}
+            styleButton={[defaultStyle.button, styles.deletButton]}
+            styleText={{ color: 'white' }}
+            onPress={() => tryDeletPost()}
+          />
+        }
       </View>
     </ScrollView>
   )
@@ -226,4 +243,9 @@ const styles = StyleSheet.create({
     height: '100%',
     marginBottom: 20,
   },
+
+  deletButton: {
+    backgroundColor: 'black',
+    marginVertical: 10,
+  }
 })
