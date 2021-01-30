@@ -10,8 +10,6 @@ import { database, auth } from '../config/firebase'
 
 import { StyleSheet } from 'react-native'
 
-//LogBox.ignoreAllLogs(true)
-
 var chatsRef;
 
 export default function chatScreen({ navigation, route }) {

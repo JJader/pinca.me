@@ -9,6 +9,7 @@ import {
   MakeProjectScreen,
   ProfileScreen,
   ChatScreen,
+  ChatScreenList,
   MoreInfoScreen,
   EditPostScreen
 } from "./index";
@@ -51,14 +52,25 @@ export default function App() {
           ),
         }}
       />
+
       <Tab.Screen
-        name="chat"
-        component={ChatScreen}
+        name="chatList"
+        component={ChatScreenList}
         options={{
           title: () => null,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="ios-chatbubbles" size={size} color={color} />
           ),
+        }}
+      />
+
+      <Tab.Screen
+        name="chat"
+        component={ChatScreen}
+        options={{
+          title: () => null,
+          tabBarVisible: false,
+          tabBarButton: () => false,
         }}
       />
       <Tab.Screen
