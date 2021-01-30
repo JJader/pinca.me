@@ -17,7 +17,6 @@ export async function updateUser(id, data) {
       .collection("users")
       .doc(id)
       .update({ ...data });
-    return true;
   } catch (err) {
     console.log("erro em updateUser");
     return {

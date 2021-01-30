@@ -45,6 +45,7 @@ export default StyleSheet.create({
     alignItems: "center",
     borderRadius: 5,
     height: 60,
+    marginBottom:15,
   },
 
   shadow: {

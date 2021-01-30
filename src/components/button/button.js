@@ -9,7 +9,7 @@ import {
 
 import { defaultStyle } from '../../styles'
 
-export default function loadingButton({
+export default function button({
   onPress = () => { },
   text = "CLIQUE AQUI",
   styleText = { color: 'white' },
