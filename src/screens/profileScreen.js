@@ -5,11 +5,12 @@ import {
   StyleSheet,
   ScrollView,
   FlatList,
+  RefreshControl,
 } from "react-native";
 
 import { useFocusEffect } from '@react-navigation/native'
 
-import { getPosts } from "../api/posts";
+import { getPosts, updateUserProjects } from "../api/posts";
 import { auth, database } from "../config/firebase";
 
 import { Avatar } from "react-native-elements";
@@ -28,6 +29,7 @@ export default function profileScreen({ user, navigation, route }) {
   const [posts, setPosts] = useState([]);
   const [userData, setUserData] = useState("");
   const [screenState, setScreenState] = useState(CURRENT_PROFILE);
+  const [refreshing, setRefreshing] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -98,13 +100,29 @@ export default function profileScreen({ user, navigation, route }) {
     }
   }
 
+  function updateScroll() {
+    if (screenState == CURRENT_PROFILE) {
+      setRefreshing(true);
+      updateUserProjects().then()
+      setRefreshing(false);
+    }
+  }
+
   const iconName = (
     screenState != CURRENT_PROFILE ? undefined :
       'exit-run'
   )
 
   return (
-    <ScrollView contentContainerStyle={defaultStyle.scrollView}>
+    <ScrollView contentContainerStyle={defaultStyle.scrollView}
+
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={() => updateScroll()}
+        />
+      }
+    >
       <View style={defaultStyle.container}>
 
         <View style={styles.profileTab}>

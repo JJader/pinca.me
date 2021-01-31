@@ -27,7 +27,10 @@ export async function updateUser(id, data) {
 
 export async function searchByName(name) {
   try {
-    return await database.collection("users").where("name", ">=", name).get();
+    return await database
+      .collection("users")
+      .where("name", ">=", name)
+      .get();
   } catch (err) {
     console.log("error in searchByname");
   }

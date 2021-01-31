@@ -127,6 +127,50 @@ export async function updatePost(id, data) {
   }
 }
 
+export async function updateUserProjects() {
+  const { uid } = auth.currentUser;
+
+  const posts1 = await searchUserInPosts(
+    'collaborators',
+    'array-contains',
+    uid
+  )
+
+  const posts2 = await searchUserInPosts(
+    'creator',
+    '==',
+    uid
+  )
+
+  let otherPosts = []
+  let myPosts = []
+
+  if (!posts1.error) {
+    otherPosts = posts1.docs.map((post) => post.id)
+
+    if (!posts2.error) {
+      myPosts = posts2.docs.map((post) => post.id)
+
+      const projects = myPosts.concat(otherPosts)
+      await updateUser(uid, { projects })
+    }
+  }
+
+}
+
+export async function searchUserInPosts(param, condition, id) {
+  try {
+    return await database
+      .collection('posts')
+      .where(param, condition, id)
+      .get()
+  }
+  catch (err) {
+    console.log("erro em searchUserInCollaborators" + err.message);
+    return { error: err.message }
+  }
+}
+
 export async function addProjetToUser(UserId, postId) {
   let user = await getUserData(UserId)
 
