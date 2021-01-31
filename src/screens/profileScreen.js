@@ -23,14 +23,11 @@ import Card from "../components/card/card";
 import { defaultStyle } from "../styles/index";
 import { lightGrey, pink } from "../styles/color";
 
-var unsubscribeUser;
-let currentUser;
 const CURRENT_PROFILE = 'EDITE SEU PERFIL'
 const OTHER_PROFILE = 'ENVIE UMA MENSSAGEM'
 
 export default function profileScreen({ user, navigation, route }) {
   const [posts, setPosts] = useState([]);
-  const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [userData, setUserData] = useState("");
   const [screenState, setScreenState] = useState(CURRENT_PROFILE);
 
@@ -96,7 +93,6 @@ export default function profileScreen({ user, navigation, route }) {
 
   function iconPress() {
     if (screenState == CURRENT_PROFILE) {
-      unsubscribeUser();
       singOut();
     }
     else if (screenState == OTHER_PROFILE) {
