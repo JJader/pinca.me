@@ -11,7 +11,7 @@ export async function registration(email, password, data) {
         category: [],
         university: "",
         course: "",
-        picture: "",
+        picture: "https://firebasestorage.googleapis.com/v0/b/teste-a175d.appspot.com/o/defaultPic.jpg?alt=media&token=e13eac55-a75f-424c-9109-6ae3f79d40c4",
         projects: [],
         chats:[],
         email: email,

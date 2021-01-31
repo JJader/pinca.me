@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,6 @@ import {
 import { useFocusEffect } from '@react-navigation/native'
 
 import { getPosts } from "../api/posts";
-import { getUserData } from "../api/user";
 import { auth, database } from "../config/firebase";
 
 import { Avatar } from "react-native-elements";
@@ -18,7 +17,6 @@ import { singOut } from "../api/login";
 import Button from '../components/button/button'
 import Icon from '../components/icons/containerIcon'
 
-import defaultPic from "../assets/defaultPic.jpg";
 import Card from "../components/card/card";
 import { defaultStyle } from "../styles/index";
 import { lightGrey, pink } from "../styles/color";

@@ -58,13 +58,6 @@ function App() {
                   headerShown: false,
                 }}
               />
-              <Stack.Screen
-                name="edit"
-                component={EditScreen}
-                options={{
-                  headerShown: false,
-                }}
-              />
             </>
           )}
       </Stack.Navigator>

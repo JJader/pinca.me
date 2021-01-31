@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import {
   StatusBar,
   StyleSheet,
@@ -6,13 +6,13 @@ import {
   Text,
   View,
   ScrollView,
-  Image,
-  TouchableOpacity,
 } from "react-native";
+
+import { useFocusEffect } from '@react-navigation/native'
 
 import { Avatar } from "react-native-elements";
 
-import { Close } from '../components/icons/closeIcon'
+import Close from '../components/icons/closeIcon'
 import defaultPic from "../assets/defaultPic.jpg";
 import SelectList from "../components/list/selectList";
 import { auth } from "../config/firebase";
@@ -24,6 +24,7 @@ import { defaultStyle } from "../styles";
 import LoadingButton from "../components/button/loadingButton";
 import { pink } from "../styles/color";
 
+var CATEGORYList = CATEGORY;
 
 export default function editScreen({ navigation }) {
   const [name, setName] = useState("");
@@ -31,19 +32,36 @@ export default function editScreen({ navigation }) {
   const [course, setCourse] = useState("");
   const [university, setUniversity] = useState("");
   const [category, setCategory] = useState([]);
+  const [selectCategory, setSelectCategory] = useState([]);
   const [picture, setPicture] = useState("");
 
-  useEffect(() => {
-    let currentUser = auth.currentUser.uid;
-    getUserData(currentUser).then((userData) => {
-      setName(userData.data().name);
-      setBio(userData.data().bio);
-      setCourse(userData.data().course);
-      setUniversity(userData.data().university);
-      setCategory(userData.data().category);
-      setPicture(userData.data().picture);
-    });
-  }, []);
+  useFocusEffect(
+
+    useCallback(() => {
+      let currentUser = auth.currentUser.uid;
+
+      getUserData(currentUser).then((userData) => {
+        setName(userData.data().name);
+        setBio(userData.data().bio);
+        setCourse(userData.data().course);
+        setUniversity(userData.data().university);
+        setCategory(userData.data().category);
+        setPicture(userData.data().picture);
+        formatSelectCategory()
+      });
+    }, [auth.currentUser.uid])
+
+  )
+
+  function formatSelectCategory() {
+    const list = category.map((item) => (
+      { id: item }
+    )
+    )
+
+    CATEGORYList.concat(list)
+    setSelectCategory(list)
+  }
 
   async function tryUpdateUser() {
     const data = {
@@ -73,6 +91,7 @@ export default function editScreen({ navigation }) {
     setCourse("");
     setUniversity("");
     setCategory([]);
+    setSelectCategory([]);
     setPicture("");
   }
 
@@ -84,7 +103,10 @@ export default function editScreen({ navigation }) {
 
         <View style={styles.headerView}>
           <Text style={defaultStyle.title}>Editar perfil</Text>
-          <Close />
+
+          <Close
+            onPress={() => navigation.goBack()}
+          />
         </View>
 
         <Avatar
@@ -127,17 +149,19 @@ export default function editScreen({ navigation }) {
         <SelectList
           text="Areas de interesse"
           inputText="Procurar"
-          data={CATEGORY}
+          data={CATEGORYList}
+          dataSelected={selectCategory}
           onItemsChange={setCategory}
           buttonColor={pink}
           buttonText="SALVAR INTERESSE"
+          canAddItems={true}
         />
 
         <LoadingButton
           text={'SALVAR'}
           onPress={() => tryUpdateUser()}
         />
-        
+
       </View>
     </ScrollView>
   );
