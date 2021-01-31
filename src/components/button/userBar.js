@@ -10,7 +10,7 @@ export default function userBar({
   style = { height: 40 },
   styleText,
   size = 'small',
-  onPress = () => {},
+  onPress = () => { },
 }) {
   return (
     <View style={[styles.viewUser, style]}>

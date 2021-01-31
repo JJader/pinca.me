@@ -1,14 +1,18 @@
 // @refresh reset
 
 import React, { useState, useCallback } from 'react'
+import { View } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
-
 import { GiftedChat } from 'react-native-gifted-chat'
+
+import Close from '../components/icons/closeIcon'
+
 import AsyncStorage from '@react-native-community/async-storage'
 import { addChatToUser, getUserData } from '../api/user'
 import { database, auth } from '../config/firebase'
 
 import { StyleSheet } from 'react-native'
+
 
 var chatsRef;
 var chatId;
@@ -99,20 +103,15 @@ export default function chatScreen({ navigation, route }) {
 
 
   return (
-    < GiftedChat
-      messages={messages}
-      user={user}
-      onSend={handleSend}
-    />
+    <>
+      <Close
+        onPress={() => { navigation.goBack() }}
+      />
+      < GiftedChat
+        messages={messages}
+        user={user}
+        onSend={handleSend}
+      />
+    </>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 30,
-  },
-})

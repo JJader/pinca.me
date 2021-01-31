@@ -83,7 +83,8 @@ export default function chatScreenList({ navigation }) {
 
 const styles = StyleSheet.create({
   userBar: {
-    marginTop: 15,
+    padding:5,
+    marginBottom:10,
     borderWidth: 0.5,
     borderColor: 'white',
     borderBottomColor: lightGrey

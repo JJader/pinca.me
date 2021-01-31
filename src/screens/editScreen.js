@@ -12,7 +12,7 @@ import {
 
 import { Avatar } from "react-native-elements";
 
-import { Close } from '../components/icons/icons'
+import { Close } from '../components/icons/closeIcon'
 import defaultPic from "../assets/defaultPic.jpg";
 import SelectList from "../components/list/selectList";
 import { auth } from "../config/firebase";
