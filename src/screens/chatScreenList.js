@@ -1,47 +1,91 @@
-import { useScrollToTop } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
 
-import { FlatList, View, Text } from 'react-native'
-import { database } from '../config/firebase'
+import { FlatList, View, Text, StyleSheet } from 'react-native'
+import { getUserData } from '../api/user'
+import { database, auth } from '../config/firebase'
+import UserBar from "../components/button/userBar";
+import { ScrollView } from 'react-native-gesture-handler'
+import { defaultStyle } from '../styles'
+import { lightGrey, pink } from '../styles/color'
+
+
 
 export default function chatScreenList({ navigation }) {
 
-    const [Chats, setChats] = useState([])
+  const [chats, setChats] = useState([])
+  const userRef = auth.currentUser.uid
 
-    /*    useEffect(() => {
-            const chatsPrivate = database
-                .collection('chats')
-                .doc('privateChat')
-                .onSnapshot(querySnapshot => {
-                    const chats = [];
-    
-                    querySnapshot.forEach(documentSnapshot => {
-                        chats.push({
-                            ...documentSnapshot.data(),
-                            key: documentSnapshot.id,
-                        });
-                    });
-                    setChats(chats)
-                })
-            return () => chatsPrivate()
-        }, [])
-    */
+  useFocusEffect(
+    useCallback(() => {
+      const unsubscribe = database
+        .collection('users')
+        .doc(userRef)
+        .onSnapshot((user) => {
+          const ids = user.data().chats
 
+          creatObj(ids).then()
+        })
 
-    async function getPrivChats() {
-        const chatsRef = database.collection('chats').doc('privateChat')
-        const snapshot = await chatsRef.get()
-        //let chat = snapshot.map((cid) => cid.id)
-        //setChats(chat)
-        console.log(snapshot)
+      return () => { unsubscribe() }
+    }, [userRef]
+    )
+  )
+
+  async function creatObj(ids) {
+    let newChat = [];
+    for (let index = 0; index < ids.length; index++) {
+      const user = await getNames(ids[index]);
+      const id = ids[index];
+      const obj = { user, id };
+      newChat.push(obj);
     }
 
-    return (
-        getPrivChats(),
-        //console.log(Chats),
-        < FlatList >
+    setChats(newChat)
+  }
 
-        </FlatList >
+  async function getNames(chats) {
+    const users = chats.split('_')
+    const user0Data = await getUserData(users[0])
+    const user1Data = await getUserData(users[1])
 
-    )
+    if (user0Data.id == auth.currentUser.uid) {
+      return (user1Data.data())
+    } else {
+      return (user0Data.data())
+    }
+  }
+
+  return (
+
+    <View style={defaultStyle.container}>
+      <Text style={defaultStyle.title}>CHAT</Text>
+
+      < FlatList
+        data={chats}
+        renderItem={({ item }) => {
+          return (
+            <UserBar
+              size={'medium'}
+              name={item.user.name}
+              image={item.user.picture}
+              styleText={{ fontSize: 18 }}
+              style={styles.userBar}
+              onPress={() => { navigation.navigate('chat', { chatId: item.id }) }}
+            />
+          )
+        }}
+        key={({ item }) => item.id}
+      />
+    </View>
+  )
 }
+
+const styles = StyleSheet.create({
+  userBar: {
+    marginTop: 15,
+    borderWidth: 0.5,
+    borderColor: 'white',
+    borderBottomColor: lightGrey
+  }
+})
