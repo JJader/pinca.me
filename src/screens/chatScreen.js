@@ -20,7 +20,6 @@ export default function chatScreen({ navigation, route }) {
   useFocusEffect(
     useCallback(() => {
 
-
       if (route.params && route.params.chatId) {
         chatId = route.params.chatId
       } else {
@@ -45,7 +44,9 @@ export default function chatScreen({ navigation, route }) {
             }
 
             querySnapshot.forEach((doc) => {
-              route.params && route.params.chatIdmessagesFirestore.push({
+              const message = doc.data()
+              const createdAt = message.createdAt.toDate()
+              messagesFirestore.push({
                 ...message,
                 createdAt: createdAt,
               })

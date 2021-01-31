@@ -9,12 +9,13 @@ export default function userBar({
   image,
   style = { height: 40 },
   styleText,
+  size = 'small',
   onPress = () => {},
 }) {
   return (
     <View style={[styles.viewUser, style]}>
       <TouchableOpacity onPress={() => onPress()}>
-        <Avatar rounded source={{ uri: image }} size="small" />
+        <Avatar rounded source={{ uri: image }} size={size} />
       </TouchableOpacity>
 
       <Text style={[styles.userName, styleText]}>{name}</Text>
