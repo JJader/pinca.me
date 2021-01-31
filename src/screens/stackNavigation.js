@@ -20,7 +20,11 @@ function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="start">
+      <Stack.Navigator initialRouteName="start"
+        screenOptions={{
+          cardStyle: { backgroundColor: 'white' }
+        }}
+      >
         {!isUserCurrent ? (
           <>
             <Stack.Screen
@@ -46,23 +50,23 @@ function App() {
             />
           </>
         ) : (
-          <>
-            <Stack.Screen
-              name="tabNavigation"
-              component={TabNavigation}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="edit"
-              component={EditScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-          </>
-        )}
+            <>
+              <Stack.Screen
+                name="tabNavigation"
+                component={TabNavigation}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="edit"
+                component={EditScreen}
+                options={{
+                  headerShown: false,
+                }}
+              />
+            </>
+          )}
       </Stack.Navigator>
     </NavigationContainer>
   );
