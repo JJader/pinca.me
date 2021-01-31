@@ -1,63 +1,75 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  Image,
-  TouchableOpacity,
   ScrollView,
   FlatList,
 } from "react-native";
+
+import { useFocusEffect } from '@react-navigation/native'
 
 import { getPosts } from "../api/posts";
 import { getUserData } from "../api/user";
 import { auth, database } from "../config/firebase";
 
-import { Ionicons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
 import { Avatar } from "react-native-elements";
 import { singOut } from "../api/login";
+import Button from '../components/button/button'
+import Icon from '../components/icons/containerIcon'
 
 import defaultPic from "../assets/defaultPic.jpg";
 import Card from "../components/card/card";
 import { defaultStyle } from "../styles/index";
-import { pink } from "../styles/color";
+import { lightGrey, pink } from "../styles/color";
 
 var unsubscribeUser;
 let currentUser;
+const CURRENT_PROFILE = 'EDITE SEU PERFIL'
+const OTHER_PROFILE = 'ENVIE UMA MENSSAGEM'
 
-export default function profileScreen({ user, navigation }) {
+export default function profileScreen({ user, navigation, route }) {
   const [posts, setPosts] = useState([]);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [userData, setUserData] = useState("");
+  const [screenState, setScreenState] = useState(CURRENT_PROFILE);
 
-  useEffect(() => {
-    currentUser = auth.currentUser.uid;
-    if (user && user.id != currentUser) {
-      setIsCurrentUser(false);
-      getOtherUser(user.id);
-    } else {
-      setIsCurrentUser(true);
-      getCurrentUser(currentUser);
-    }
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      let id = '';
 
-  function getOtherUser(id) {
-    getUserData(id).then((user) => {
-      setUserData(user.data());
-      getUserPosts(user.data().projects);
-    });
-  }
+      if (route.params && route.params.user) {
 
-  function getCurrentUser(id) {
-    unsubscribeUser = database
-      .collection("users")
-      .doc(id)
-      .onSnapshot((query) => {
-        setUserData(query.data());
-        getUserPosts(query.data().projects);
-      });
-  }
+        id = route.params.user.id;
+        setScreenState(OTHER_PROFILE);
+
+        navigation.setOptions({
+          tabBarVisible: false,
+        })
+      }
+      else {
+        id = auth.currentUser.uid;
+        setScreenState(CURRENT_PROFILE);
+        navigation.setOptions({
+          tabBarVisible: true,
+        })
+      }
+
+      const unsubscribe = database
+        .collection("users")
+        .doc(id)
+        .onSnapshot((query) => {
+          setUserData(query.data());
+          getUserPosts(query.data().projects);
+        });
+
+      return () => {
+        navigation.setParams({ user: undefined })
+        unsubscribe()
+      }
+
+    }, [route.params && route.params.user])
+  )
 
   function getUserPosts(ids) {
     getPosts(ids).then((snapshot) => {
@@ -73,98 +85,78 @@ export default function profileScreen({ user, navigation }) {
     );
   }
 
+  function buttonPress() {
+    if (screenState == CURRENT_PROFILE) {
+      navigation.navigate("edit")
+    }
+    else if (screenState == OTHER_PROFILE) {
+      user.talk();
+    }
+  }
+
+  function iconPress() {
+    if (screenState == CURRENT_PROFILE) {
+      unsubscribeUser();
+      singOut();
+    }
+    else if (screenState == OTHER_PROFILE) {
+      navigation.goBack()
+    }
+  }
+
+  const iconName = (
+    screenState != CURRENT_PROFILE ? undefined :
+      'exit-run'
+  )
+
   return (
     <ScrollView contentContainerStyle={defaultStyle.scrollView}>
       <View style={defaultStyle.container}>
-        {isCurrentUser ? null : (
-          <AntDesign
-            name="back"
-            size={24}
-            color="#808080"
-            style={styles.backButton}
-            onPress={() => {
-              user.close();
-            }}
-          />
-        )}
 
         <View style={styles.profileTab}>
-          <Avatar rounded source={{ uri: userData.picture }} size="xlarge" />
+          <Avatar
+            rounded
+            source={{ uri: userData.picture }}
+            size="xlarge"
+          />
+
           <View style={styles.profileInfo}>
-            <View
-              style={{
-                alignSelf: "center",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "row",
-              }}
-            >
-              <Text style={styles.textName}>{userData.name}</Text>
-              {isCurrentUser ? (
-                <Ionicons
-                  name="exit"
-                  size={24}
-                  color="#808080"
-                  onPress={() => {
-                    unsubscribeUser();
-                    singOut();
-                  }}
-                />
-              ) : null}
-            </View>
+            <Icon
+              name={iconName}
+              style={{ alignSelf: 'flex-end' }}
+              onPress={() => iconPress()}
+            />
 
-            <Text style={styles.textCourse}>{userData.course}</Text>
-            <Text style={styles.textUniversidade}>{userData.university}</Text>
+            <Text style={styles.textName} numberOfLines={1}>
+              {userData.name}
+            </Text>
+            <Text style={styles.text}>
+              {userData.course}
+            </Text>
+            <Text style={styles.text}>
+              {userData.university}
+            </Text>
 
-            {isCurrentUser ? (
-              <TouchableOpacity
-                style={styles.buttonMessage}
-                onPress={() => navigation.navigate("edit")}
-              >
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                >
-                  EDITE SEU PERFIL
-                </Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={styles.buttonMessage}
-                onPress={() => {
-                  user.talk();
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                >
-                  ENVIE UMA MENSSAGEM
-                </Text>
-              </TouchableOpacity>
-            )}
+            <Button
+              text={screenState}
+              onPress={() => buttonPress()}
+            />
           </View>
         </View>
+
         <View style={styles.descriptionTab}>
-          <Text style={{ textAlign: "justify" }}>{userData.bio}</Text>
+          <Text style={{ textAlign: "justify" }}>
+            {userData.bio}
+          </Text>
         </View>
 
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ marginTop: 5, marginBottom: 5 }}>
+        <View style={styles.flatView}>
+          <Text style={styles.text}>
             Áreas de interesse:
           </Text>
+
           <FlatList
+            style={{ alignSelf: 'center', }}
             horizontal={true}
             data={userData.category}
             renderItem={({ item }) => renderCategory(item)}
@@ -172,11 +164,7 @@ export default function profileScreen({ user, navigation }) {
           />
         </View>
 
-        <View style={{ width: "100%", alignItems: "center" }}>
-          <Text style={{ marginTop: 15, marginBottom: 1 }}>
-            Projetos realizados:
-          </Text>
-
+        <View style={{ flex: 1 }}>
           {posts.map((item) => (
             <Card
               key={item.id}
@@ -186,12 +174,27 @@ export default function profileScreen({ user, navigation }) {
             />
           ))}
         </View>
+
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+
+  textName: {
+    fontSize: 32,
+    textAlign: 'center',
+  },
+
+  text: {
+    color: lightGrey,
+  },
+
   card: {
     backgroundColor: "#C4C4C4",
     marginLeft: 8,
@@ -200,49 +203,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-
-  profilePic: {
-    marginTop: 10,
-    marginLeft: 5,
-    height: 140,
-    width: 140,
-    borderRadius: 70,
-  },
-
-  profileTab: {
-    marginTop: 30,
-    flexDirection: "row",
-  },
-
-  textName: {
-    fontSize: 32,
-    marginRight: 10,
-  },
-
-  textUniversidade: {
-    color: "#808080",
-    fontSize: 14,
-  },
-
-  textCourse: {
-    marginTop: 5,
-    marginBottom: 5,
-    color: "black",
-    fontSize: 14,
-  },
-
-  buttonMessage: {
-    marginTop: 8,
-    backgroundColor: pink,
-    height: 30,
-    width: "100%",
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
+  flatView: {
+    flex: 1,
+    marginVertical: 20
   },
 
   profileInfo: {
@@ -251,17 +214,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  descriptionTab: {
-    backgroundColor: "white",
+  profileTab: {
     marginTop: 5,
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    height: 120,
+    flexDirection: "row",
+    alignItems: 'center',
   },
 
-  backButton: {
-    marginTop: 25,
-    marginRight: 320,
+  descriptionTab: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+    minHeight: 150,
   },
+
 });

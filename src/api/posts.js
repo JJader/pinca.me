@@ -85,10 +85,12 @@ export async function getPosts(ids) {
         .doc(ids[i])
         .get()
 
-      list.push({
-        id: element.id,
-        ...element.data()
-      })
+      if (element.data()) {
+        list.push({
+          id: element.id,
+          ...element.data()
+        })
+      }
     }
 
     return list;

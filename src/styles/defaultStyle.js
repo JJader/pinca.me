@@ -10,6 +10,7 @@ export default StyleSheet.create({
   },
 
   scrollView: {
+    flexGrow: 1,
     width: "100%",
     backgroundColor: "white",
   },

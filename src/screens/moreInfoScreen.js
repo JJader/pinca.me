@@ -11,9 +11,9 @@ import {
   ImageBackground
 } from 'react-native'
 
-import LoadingButton from '../components/button/button';
+import LoadingButton from '../components/button/loadingButton';
 import UserBar from '../components/button/userBar';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import Close from '../components/icons/closeIcon'
 
 import ShowList from '../components/list/showList'
 import { defaultStyle } from '../styles';
@@ -52,29 +52,25 @@ export default function moreInfoScreen({ navigation, route }) {
 
       <StatusBar backgroundColor='black' />
 
-      <View style={{ flex: 1 }}>
-        <ImageBackground
-          source={{
-            uri: "https://picsum.photos/seed/" + Math.random() + "/500/500",
-          }}
-          resizeMode={"cover"}
-          style={styles.image}
-        >
 
-          <MaterialCommunityIcons
-            name="close-circle"
-            size={30}
-            color={pink}
-            style={{ alignSelf: 'flex-end', padding: 10 }}
-            onPress={() => (closeMoreInfo())}
-          />
+      <ImageBackground
+        source={{
+          uri: "https://picsum.photos/seed/" + Math.random() + "/500/500",
+        }}
+        resizeMode={"cover"}
+        style={styles.image}
+      >
 
-        </ImageBackground>
-      </View>
+        <Close
+          onPress={() => closeMoreInfo()}
+        />
+
+      </ImageBackground>
 
       <View style={styles.textView}>
         <UserBar
           name={user.name}
+          image={user.picture}
         />
 
         <Text style={styles.title}>{title}</Text>
@@ -107,7 +103,7 @@ export default function moreInfoScreen({ navigation, route }) {
               text={'EDITAR'}
               styleButton={styles.button}
               onPress={() => navigation
-                .navigate('create', { post:route.params })
+                .navigate('create', { post: route.params })
               }
             />
           )
@@ -117,7 +113,7 @@ export default function moreInfoScreen({ navigation, route }) {
               <LoadingButton
                 text={'DESINSCREVER-SE'}
                 styleButton={[styles.button, { backgroundColor: 'grey' }]}
-                onPress={() => removeInterested().then()}
+                onPress={() => removeInterested()}
               />
             )
             :
@@ -125,7 +121,7 @@ export default function moreInfoScreen({ navigation, route }) {
               <LoadingButton
                 text={'INSCREVER-SE'}
                 styleButton={styles.button}
-                onPress={() => addInterested().then()}
+                onPress={() => addInterested()}
               />
             )
       }
@@ -151,7 +147,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '150%',
     alignSelf: 'center',
-    //justifyContent: 'flex-end'
   },
 
   title: {
