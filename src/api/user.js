@@ -1,4 +1,4 @@
-import { auth, database } from "../config/firebase";
+import { auth, database, storage } from "../config/firebase";
 
 export async function getUserData(id) {
   try {
@@ -54,4 +54,33 @@ export async function addChatToUser(chatId) {
     await updateUser(users[1], { chats: chats1 })
   }
 
+}
+
+export async function uploadImage(uri) {
+  const response = await fetch(uri)
+  const blob = await response.blob()
+
+  const task = storage
+    .ref()
+    .child(`avatar/${auth.currentUser.uid}`)
+    .put(blob)
+
+
+  const taskProgress = snapshot => {
+    console.log(`transferred ${task.snapshot.bytesTransferred}`)
+  }
+
+  const taskCompleted = () => {
+    task.snapshot.ref.getDownloadURL().then((snapshot) => {
+      console.log(snapshot)
+    })
+  }
+
+  const taskError = snapshot => {
+    console.log(snapshot)
+  }
+  
+  task.on("state_changed", taskProgress, taskError, taskCompleted)
+
+  return await task.snapshot.ref.getDownloadURL()
 }

@@ -36,5 +36,26 @@ export const CATEGORY = [{
 }, {
   id: 'Sistema de informação',
   name: 'Sistema de informação'
+}, {
+  id: 'Python',
+  name: 'Python'
+}, {
+  id: 'Java',
+  name: 'Java'
+}, {
+  id: 'React native',
+  name: 'React native'
+}, {
+  id: 'Robótica',
+  name: 'Robótica'
+}, {
+  id: 'Arduino',
+  name: 'Arduino'
+}, {
+  id: 'Programação',
+  name: 'Programação'
+}, {
+  id: 'Elétrica',
+  name: 'Elétrica'
 }
 ];

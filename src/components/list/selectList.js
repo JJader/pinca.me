@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import MultiSelect from 'react-native-multiple-select';
 
-export default function SelectList({
+export default function selectList({
   onItemsChange = () => { },
   data = [],
   dataSelected = [],
@@ -27,7 +27,7 @@ export default function SelectList({
   };
 
   function lastIdReapeat(items = []) {
-    if (items.length == 0) {
+    if (items.length == 0 || selectedItems.length > items.length) {
       return false
     }
 
@@ -81,11 +81,12 @@ export default function SelectList({
         styleItemsContainer={{
           marginVertical: 20,
         }}
+        
         hideTags
         hideDropdown={true}
         items={data}
         uniqueKey={uniqueKey}
-        ref={(component) => { SetMultiSelect(component) }}
+        ref={(component) => (SetMultiSelect(component))}
         onSelectedItemsChange={onSelectedItemsChange}
         selectedItems={selectedItems}
         selectText={text}
@@ -102,6 +103,7 @@ export default function SelectList({
         submitButtonText={buttonText}
         canAddItems={canAddItems}
         onAddItem={(item) => (addNewItens(item))}
+        
       />
       <View>
         {

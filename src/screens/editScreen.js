@@ -12,11 +12,13 @@ import { useFocusEffect } from '@react-navigation/native'
 
 import { Avatar } from "react-native-elements";
 
+import ImagePicker from '../components/button/imagePicker'
 import Close from '../components/icons/closeIcon'
 import defaultPic from "../assets/defaultPic.jpg";
 import SelectList from "../components/list/selectList";
+
 import { auth } from "../config/firebase";
-import { updateUser } from "../api/user";
+import { updateUser, uploadImage } from "../api/user";
 
 import { getUserData } from "../api/user";
 import { CATEGORY } from '../redux/constants/index'
@@ -24,16 +26,14 @@ import { defaultStyle } from "../styles";
 import LoadingButton from "../components/button/loadingButton";
 import { pink } from "../styles/color";
 
-var CATEGORYList = CATEGORY;
-
 export default function editScreen({ navigation }) {
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
   const [course, setCourse] = useState("");
   const [university, setUniversity] = useState("");
   const [category, setCategory] = useState([]);
-  const [selectCategory, setSelectCategory] = useState([]);
-  const [picture, setPicture] = useState("");
+  const [picture, setPicture] = useState(undefined);
+  const [isReady, setIsReady] = useState(false)
 
   useFocusEffect(
 
@@ -47,30 +47,23 @@ export default function editScreen({ navigation }) {
         setUniversity(userData.data().university);
         setCategory(userData.data().category);
         setPicture(userData.data().picture);
-        formatSelectCategory()
+        setIsReady(true)
       });
     }, [auth.currentUser.uid])
 
   )
 
-  function formatSelectCategory() {
-    const list = category.map((item) => (
-      { id: item }
-    )
-    )
-
-    CATEGORYList.concat(list)
-    setSelectCategory(list)
-  }
-
   async function tryUpdateUser() {
+
+    const url = await uploadImage(picture)
+
     const data = {
       name,
       bio,
       course,
       university,
       category,
-      picture,
+      picture: url,
     };
     const { uid } = auth.currentUser;
 
@@ -80,7 +73,6 @@ export default function editScreen({ navigation }) {
       alert(snapshot.error.message);
     }
     else {
-      restoreScreen()
       navigation.goBack();
     }
   }
@@ -91,79 +83,81 @@ export default function editScreen({ navigation }) {
     setCourse("");
     setUniversity("");
     setCategory([]);
-    setSelectCategory([]);
-    setPicture("");
+    setPicture(null);
+    setIsReady(false)
   }
 
   return (
-    <ScrollView contentContainerStyle={defaultStyle.scrollView}>
-      <StatusBar backgroundColor="black" />
+    !isReady ? null :
+      <ScrollView contentContainerStyle={defaultStyle.scrollView}>
+        <StatusBar backgroundColor="black" />
 
-      <View style={defaultStyle.container}>
+        <View style={defaultStyle.container}>
 
-        <View style={styles.headerView}>
-          <Text style={defaultStyle.title}>Editar perfil</Text>
+          <View style={styles.headerView}>
+            <Text style={defaultStyle.title}>Editar perfil</Text>
 
-          <Close
-            onPress={() => navigation.goBack()}
+            <Close
+              onPress={() => {
+                restoreScreen()
+                navigation.goBack();
+              }}
+            />
+          </View>
+
+          <ImagePicker
+            source={picture}
+            onChange={setPicture}
           />
+
+          <TextInput
+            style={[defaultStyle.input, { marginTop: 15 }]}
+            placeholder="Nome"
+            value={name}
+            onChangeText={setName}
+          />
+
+          <TextInput
+            style={defaultStyle.input}
+            placeholder="Curso"
+            value={course}
+            onChangeText={setCourse}
+          />
+
+          <TextInput
+            style={defaultStyle.input}
+            placeholder="Instituição"
+            value={university}
+            onChangeText={setUniversity}
+          />
+
+          <TextInput
+            style={defaultStyle.inputHorizontal}
+            placeholder="Fale sobre você"
+            value={bio}
+            onChangeText={setBio}
+            multiline={true}
+          />
+
+          <SelectList
+            text="Areas de interesse"
+            inputText="Procurar"
+            data={CATEGORY}
+            dataSelected={category}
+            onItemsChange={setCategory}
+            buttonColor={pink}
+            buttonText="SALVAR INTERESSE"
+            canAddItems={true}
+            displayKey='id'
+          />
+
+          <LoadingButton
+            text={'SALVAR'}
+            onPress={() => tryUpdateUser()}
+          />
+
         </View>
-
-        <Avatar
-          rounded
-          size="xlarge"
-          containerStyle={styles.avatar}
-          source={defaultPic}
-          onPress={() => alert("Trocar Foto!")}
-        />
-
-        <TextInput
-          style={defaultStyle.input}
-          placeholder="Nome"
-          value={name}
-          onChangeText={setName}
-        />
-
-        <TextInput
-          style={defaultStyle.input}
-          placeholder="Curso"
-          value={course}
-          onChangeText={setCourse}
-        />
-
-        <TextInput
-          style={defaultStyle.input}
-          placeholder="Instituição"
-          value={university}
-          onChangeText={setUniversity}
-        />
-
-        <TextInput
-          style={defaultStyle.inputHorizontal}
-          placeholder="Fale sobre você"
-          value={bio}
-          onChangeText={setBio}
-          multiline={true}
-        />
-
-        <SelectList
-          text="Areas de interesse"
-          inputText="Procurar"
-          data={CATEGORYList}
-          dataSelected={selectCategory}
-          onItemsChange={setCategory}
-          buttonColor={pink}
-          buttonText="SALVAR INTERESSE"
-          canAddItems={true}
-        />
-
-        <LoadingButton
-          text={'SALVAR'}
-          onPress={() => tryUpdateUser()}
-        />
-
-      </View>
-    </ScrollView>
+      </ScrollView>
   );
 }
 
@@ -177,11 +171,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: 'space-between'
-  },
-
-  avatar: {
-    alignSelf: "center",
-    marginBottom: 15
   },
 
   button: {
