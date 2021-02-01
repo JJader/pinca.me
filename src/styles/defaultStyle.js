@@ -60,4 +60,14 @@ export default StyleSheet.create({
       width: 0,
     },
   },
+
+  tabIcon:{
+    backgroundColor:pink, 
+    width:'100%', 
+    height:'90%',
+    textAlign:'center',
+    textAlignVertical:'center',
+    borderRadius:20,
+    opacity:0.8,
+  }
 });

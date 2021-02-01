@@ -13,7 +13,9 @@ import {
   MoreInfoScreen,
   EditScreen,
 } from "./index";
-
+import { pink } from "../styles/color";
+import { defaultStyle } from "../styles";
+defaultStyle
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -48,7 +50,12 @@ export default function App() {
         options={{
           title: () => null,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="ios-add" size={size} color={color} />
+            <Ionicons
+              name="ios-add"
+              size={size}
+              color={color}
+              style={[defaultStyle.tabIcon,defaultStyle.shadow]}
+            />
           ),
         }}
       />
