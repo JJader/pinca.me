@@ -96,7 +96,7 @@ export default function feedScreen({ navigation, route }) {
         />
       }
     >
-      <StatusBar backgroundColor="black" />
+      <StatusBar translucent backgroundColor="black" />
       <View style={[defaultStyle.container]}>
         <Text style={defaultStyle.title}>Explorar</Text>
 

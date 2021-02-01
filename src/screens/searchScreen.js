@@ -6,6 +6,7 @@ import {
   FlatList,
   Modal,
   TouchableOpacity,
+  StatusBar
 } from "react-native";
 
 import { searchByName } from "../api/user";
@@ -48,12 +49,13 @@ export default function search({ user, navigation }) {
 
   return (
     <View style={defaultStyle.container}>
-      <Text style={defaultStyle.title}>Search</Text>
+      <StatusBar backgroundColor='black' />
+      <Text style={defaultStyle.title}>Pesquisar</Text>
 
       <TextInput
         style={defaultStyle.input}
         onChangeText={searchUser}
-        placeholder="Search"
+        placeholder="Pesquisar"
       />
 
       <FlatList

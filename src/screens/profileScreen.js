@@ -21,6 +21,7 @@ import Icon from '../components/icons/containerIcon'
 import Card from "../components/card/card";
 import { defaultStyle } from "../styles/index";
 import { lightGrey, pink } from "../styles/color";
+import { StatusBar } from "react-native";
 
 const CURRENT_PROFILE = 'EDITE SEU PERFIL'
 const OTHER_PROFILE = 'ENVIE UMA MENSSAGEM'
@@ -87,7 +88,7 @@ export default function profileScreen({ user, navigation, route }) {
       navigation.navigate("edit")
     }
     else if (screenState == OTHER_PROFILE) {
-      user.talk();
+      route.params.user.talk();
     }
   }
 
@@ -123,6 +124,7 @@ export default function profileScreen({ user, navigation, route }) {
         />
       }
     >
+      <StatusBar backgroundColor='black' />
       <View style={defaultStyle.container}>
 
         <View style={styles.profileTab}>

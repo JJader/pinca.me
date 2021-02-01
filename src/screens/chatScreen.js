@@ -55,7 +55,7 @@ export default function chatScreen({ navigation, route }) {
                 createdAt: createdAt,
               })
             })
-
+            console.log(messagesFirestore)
             setMessages(messagesFirestore)
           })
 
@@ -68,8 +68,7 @@ export default function chatScreen({ navigation, route }) {
 
   function creatChatId() {
     const userID = auth.currentUser.uid
-    const destinataryId =
-      route.params ? route.params.destinataryId ? route.params.destinataryId : auth.currentUser.uid : auth.currentUser.uid;
+    const destinataryId = route.params && route.params.destinataryId
     const chatIDpre = [];
     chatIDpre.push(userID);
     chatIDpre.push(destinataryId);
@@ -80,14 +79,14 @@ export default function chatScreen({ navigation, route }) {
   async function readUser() {
     const user = await AsyncStorage.getItem('user')
 
-    if (user && user.id == auth.currentUser.uid) {
+    if (user && user._id == auth.currentUser.uid) {
       setUser(JSON.parse(user))
     }
     else {
       const userData = await getUserData(auth.currentUser.uid);
 
       const user = {
-        id: userData.id,
+        _id: userData.id,
         name: userData.data().name
       }
 
@@ -111,6 +110,7 @@ export default function chatScreen({ navigation, route }) {
         messages={messages}
         user={user}
         onSend={handleSend}
+
       />
     </>
   )

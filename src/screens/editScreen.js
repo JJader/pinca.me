@@ -53,9 +53,7 @@ export default function editScreen({ navigation }) {
 
   )
 
-  async function tryUpdateUser() {
-
-    await uploadImage(picture, setPicture)
+  async function tryUpdateUser(picture) {
 
     const data = {
       name,
@@ -63,7 +61,7 @@ export default function editScreen({ navigation }) {
       course,
       university,
       category,
-      picture,
+      picture: picture,
     };
     const { uid } = auth.currentUser;
 
@@ -153,7 +151,10 @@ export default function editScreen({ navigation }) {
 
           <LoadingButton
             text={'SALVAR'}
-            onPress={() => tryUpdateUser()}
+            onPress={() => uploadImage(
+              picture,
+              (picture) => tryUpdateUser(picture)
+            )}
           />
 
         </View>
