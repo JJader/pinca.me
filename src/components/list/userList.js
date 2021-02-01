@@ -50,7 +50,10 @@ export default function userList({
         item[uniqueKey] = ids[i]
         item[displayKey] = user.data().name
 
-        users.push(item)
+        const find = users.find((user) => user[uniqueKey] == item[uniqueKey])
+        if (!find) {
+          users.push(item)
+        }
       }
     }
     setUsers(users)

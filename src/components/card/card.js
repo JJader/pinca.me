@@ -20,7 +20,8 @@ export default function card({
     getUserData(item.creator).then((snapshot) => {
       if (!snapshot.error) {
         const data = snapshot.data();
-        setUserData(data);
+        const id = snapshot.id;
+        setUserData({id, ...data});
       }
     });
   }, [item.id]);

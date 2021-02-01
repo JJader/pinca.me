@@ -19,15 +19,16 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function bigCard({
   item = {},
-  onPostPress = () => {},
-  onUserPress = () => {},
+  onPostPress = () => { },
+  onUserPress = () => { },
 }) {
   const [userData, setUserData] = useState({ name: "" });
 
   useEffect(() => {
     getUserData(item.creator).then((snapshot) => {
       const data = snapshot.data();
-      setUserData(data);
+      const id = snapshot.id
+      setUserData({ id, ...data });
     });
   }, [item.id]);
 

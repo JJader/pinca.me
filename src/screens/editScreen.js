@@ -55,7 +55,7 @@ export default function editScreen({ navigation }) {
 
   async function tryUpdateUser() {
 
-    const url = await uploadImage(picture)
+    await uploadImage(picture, setPicture)
 
     const data = {
       name,
@@ -63,7 +63,7 @@ export default function editScreen({ navigation }) {
       course,
       university,
       category,
-      picture: url,
+      picture,
     };
     const { uid } = auth.currentUser;
 

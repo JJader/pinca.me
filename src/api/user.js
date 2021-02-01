@@ -56,31 +56,35 @@ export async function addChatToUser(chatId) {
 
 }
 
-export async function uploadImage(uri) {
-  const response = await fetch(uri)
-  const blob = await response.blob()
+export async function uploadImage(uri, onFinish) {
+  try {
 
-  const task = storage
-    .ref()
-    .child(`avatar/${auth.currentUser.uid}`)
-    .put(blob)
+    const response = await fetch(uri)
+    const blob = await response.blob()
+
+    const task = storage
+      .ref()
+      .child(`avatar/${auth.currentUser.uid}`)
+      .put(blob)
 
 
-  const taskProgress = snapshot => {
-    console.log(`transferred ${task.snapshot.bytesTransferred}`)
-  }
+    const taskProgress = snapshot => {
+      console.log(`transferred ${task.snapshot.bytesTransferred}`)
+    }
 
-  const taskCompleted = () => {
-    task.snapshot.ref.getDownloadURL().then((snapshot) => {
+    const taskCompleted = () => {
+      task.snapshot.ref.getDownloadURL().then((snapshot) => {
+        onFinish(snapshot)
+      })
+    }
+
+    const taskError = snapshot => {
       console.log(snapshot)
-    })
-  }
+    }
 
-  const taskError = snapshot => {
-    console.log(snapshot)
-  }
-  
-  task.on("state_changed", taskProgress, taskError, taskCompleted)
+    task.on("state_changed", taskProgress, taskError, taskCompleted)
 
-  return await task.snapshot.ref.getDownloadURL()
+  } catch (error) {
+    console.log(error.message)
+  }
 }

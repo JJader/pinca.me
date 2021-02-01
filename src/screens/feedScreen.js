@@ -112,7 +112,9 @@ export default function feedScreen({ navigation, route }) {
           renderItem={({ item }) => (
             <BigCard
               item={item}
-              onUserPress={(user) => alert(user.name)}
+              onUserPress={
+                (user) => navigation.navigate('profile', { user })
+              }
               onPostPress={(post, user) => {
                 navigation.navigate('moreinfo', { ...post, user })
               }
@@ -132,7 +134,9 @@ export default function feedScreen({ navigation, route }) {
           <Card
             key={item.id}
             item={item}
-            onUserPress={(user) => alert(user.name)}
+            onUserPress={
+              (user) => { navigation.navigate('profile', { user }) }
+            }
             onPostPress={(post, user) => {
               navigation.navigate('moreinfo', { ...post, user })
             }

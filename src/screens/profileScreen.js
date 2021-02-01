@@ -181,8 +181,13 @@ export default function profileScreen({ user, navigation, route }) {
             <Card
               key={item.id}
               item={item}
-              onUserPress={(user) => alert(user.name)}
-              onPostPress={(post) => alert(post.title)}
+              onUserPress={
+                (user) => { navigation.navigate('profile', { user }) }
+              }
+              onPostPress={(post, user) => {
+                navigation.navigate('moreinfo', { ...post, user })
+              }
+              }
             />
           ))}
         </View>
