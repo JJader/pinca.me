@@ -154,6 +154,7 @@ export default function profileScreen({ user, navigation, route }) {
             <Button
               text={screenState}
               onPress={() => buttonPress()}
+              styleButton={styles.button}
             />
           </View>
         </View>
@@ -245,5 +246,11 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: 150,
   },
+
+  button:{
+    ...defaultStyle.button,
+    maxHeight:40,
+    marginVertical:10
+  }
 
 });
