@@ -8,12 +8,12 @@ import {
   ScrollView,
 } from "react-native";
 
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect } from "@react-navigation/native";
 
 import { Avatar } from "react-native-elements";
 
-import ImagePicker from '../components/button/imagePicker'
-import Close from '../components/icons/closeIcon'
+import ImagePicker from "../components/button/imagePicker";
+import Close from "../components/icons/closeIcon";
 import defaultPic from "../assets/defaultPic.jpg";
 import SelectList from "../components/list/selectList";
 
@@ -21,10 +21,11 @@ import { auth } from "../config/firebase";
 import { updateUser, uploadImage } from "../api/user";
 
 import { getUserData } from "../api/user";
-import { CATEGORY } from '../redux/constants/index'
+import { CATEGORY } from "../redux/constants/index";
 import { defaultStyle } from "../styles";
 import LoadingButton from "../components/button/loadingButton";
 import { pink } from "../styles/color";
+import { SafeAreaView } from "react-native";
 
 export default function editScreen({ navigation }) {
   const [name, setName] = useState("");
@@ -33,10 +34,9 @@ export default function editScreen({ navigation }) {
   const [university, setUniversity] = useState("");
   const [category, setCategory] = useState([]);
   const [picture, setPicture] = useState(undefined);
-  const [isReady, setIsReady] = useState(false)
+  const [isReady, setIsReady] = useState(false);
 
   useFocusEffect(
-
     useCallback(() => {
       let currentUser = auth.currentUser.uid;
 
@@ -47,14 +47,12 @@ export default function editScreen({ navigation }) {
         setUniversity(userData.data().university);
         setCategory(userData.data().category);
         setPicture(userData.data().picture);
-        setIsReady(true)
+        setIsReady(true);
       });
     }, [auth.currentUser.uid])
-
-  )
+  );
 
   async function tryUpdateUser(picture) {
-
     const data = {
       name,
       bio,
@@ -69,8 +67,7 @@ export default function editScreen({ navigation }) {
 
     if (snapshot && snapshot.error) {
       alert(snapshot.error.message);
-    }
-    else {
+    } else {
       navigation.goBack();
     }
   }
@@ -82,31 +79,27 @@ export default function editScreen({ navigation }) {
     setUniversity("");
     setCategory([]);
     setPicture(null);
-    setIsReady(false)
+    setIsReady(false);
   }
 
-  return (
-    !isReady ? null :
+  return !isReady ? null : (
+    <SafeAreaView style={{ width: "100%", height: "100%" }}>
       <ScrollView contentContainerStyle={defaultStyle.scrollView}>
         <StatusBar backgroundColor="black" />
 
         <View style={defaultStyle.container}>
-
           <View style={styles.headerView}>
             <Text style={defaultStyle.title}>Editar perfil</Text>
 
             <Close
               onPress={() => {
-                restoreScreen()
+                restoreScreen();
                 navigation.goBack();
               }}
             />
           </View>
 
-          <ImagePicker
-            source={picture}
-            onChange={setPicture}
-          />
+          <ImagePicker source={picture} onChange={setPicture} />
 
           <TextInput
             style={[defaultStyle.input, { marginTop: 15 }]}
@@ -146,19 +139,18 @@ export default function editScreen({ navigation }) {
             buttonColor={pink}
             buttonText="SALVAR INTERESSE"
             canAddItems={true}
-            displayKey='id'
+            displayKey="id"
           />
 
           <LoadingButton
-            text={'SALVAR'}
-            onPress={() => uploadImage(
-              picture,
-              (picture) => tryUpdateUser(picture)
-            )}
+            text={"SALVAR"}
+            onPress={() =>
+              uploadImage(picture, (picture) => tryUpdateUser(picture))
+            }
           />
-
         </View>
       </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -171,7 +163,7 @@ const styles = StyleSheet.create({
   headerView: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: 'space-between'
+    justifyContent: "space-between",
   },
 
   button: {
