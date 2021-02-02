@@ -22,6 +22,7 @@ import Card from "../components/card/card";
 import { defaultStyle } from "../styles/index";
 import { lightGrey, pink } from "../styles/color";
 import { StatusBar } from "react-native";
+import { SafeAreaView } from "react-native";
 
 const CURRENT_PROFILE = 'EDITE SEU PERFIL'
 const OTHER_PROFILE = 'ENVIE UMA MENSSAGEM'
@@ -116,88 +117,90 @@ export default function profileScreen({ user, navigation, route }) {
   )
 
   return (
-    <ScrollView contentContainerStyle={defaultStyle.scrollView}
+    <SafeAreaView style={{ width: '100%', height: '100%' }}>
+      <ScrollView contentContainerStyle={defaultStyle.scrollView}
 
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={() => updateScroll()}
-        />
-      }
-    >
-      <StatusBar backgroundColor='black' />
-      <View style={defaultStyle.container}>
-
-        <View style={styles.profileTab}>
-          <Avatar
-            rounded
-            source={{ uri: userData.picture }}
-            size="xlarge"
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => updateScroll()}
           />
+        }
+      >
+        <StatusBar backgroundColor='black' />
+        <View style={defaultStyle.container}>
 
-          <View style={styles.profileInfo}>
-            <Icon
-              name={iconName}
-              style={{ alignSelf: 'flex-end' }}
-              onPress={() => iconPress()}
+          <View style={styles.profileTab}>
+            <Avatar
+              rounded
+              source={{ uri: userData.picture }}
+              size="xlarge"
             />
 
-            <Text style={styles.textName} numberOfLines={1}>
-              {userData.name}
-            </Text>
-            <Text style={styles.text}>
-              {userData.course}
-            </Text>
-            <Text style={styles.text}>
-              {userData.university}
-            </Text>
+            <View style={styles.profileInfo}>
+              <Icon
+                name={iconName}
+                style={{ alignSelf: 'flex-end' }}
+                onPress={() => iconPress()}
+              />
 
-            <Button
-              text={screenState}
-              onPress={() => buttonPress()}
-              styleButton={styles.button}
+              <Text style={styles.textName} numberOfLines={1}>
+                {userData.name}
+              </Text>
+              <Text style={styles.text}>
+                {userData.course}
+              </Text>
+              <Text style={styles.text}>
+                {userData.university}
+              </Text>
+
+              <Button
+                text={screenState}
+                onPress={() => buttonPress()}
+                styleButton={styles.button}
+              />
+            </View>
+          </View>
+
+          <View style={styles.descriptionTab}>
+            <Text style={{ textAlign: "justify" }}>
+              {userData.bio}
+            </Text>
+          </View>
+
+          <View style={styles.flatView}>
+            <Text style={styles.text}>
+              Áreas de interesse:
+          </Text>
+
+            <FlatList
+              style={{ alignSelf: 'center', }}
+              horizontal={true}
+              data={userData.category}
+              renderItem={({ item }) => renderCategory(item)}
+              keyExtractor={(item, index) => index.toString()}
             />
           </View>
+
+          <View style={{ flex: 1 }}>
+            {posts.map((item) => (
+              <Card
+                key={item.id}
+                item={item}
+                onUserPress={
+                  (user) => { navigation.navigate('profile', { user }) }
+                }
+                onPostPress={(post, user) => {
+                  navigation.navigate('moreinfo', { ...post, user })
+                }
+                }
+              />
+            ))}
+          </View>
+
         </View>
-
-        <View style={styles.descriptionTab}>
-          <Text style={{ textAlign: "justify" }}>
-            {userData.bio}
-          </Text>
-        </View>
-
-        <View style={styles.flatView}>
-          <Text style={styles.text}>
-            Áreas de interesse:
-          </Text>
-
-          <FlatList
-            style={{ alignSelf: 'center', }}
-            horizontal={true}
-            data={userData.category}
-            renderItem={({ item }) => renderCategory(item)}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
-
-        <View style={{ flex: 1 }}>
-          {posts.map((item) => (
-            <Card
-              key={item.id}
-              item={item}
-              onUserPress={
-                (user) => { navigation.navigate('profile', { user }) }
-              }
-              onPostPress={(post, user) => {
-                navigation.navigate('moreinfo', { ...post, user })
-              }
-              }
-            />
-          ))}
-        </View>
-
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -248,10 +251,10 @@ const styles = StyleSheet.create({
     minHeight: 150,
   },
 
-  button:{
+  button: {
     ...defaultStyle.button,
-    maxHeight:40,
-    marginVertical:10
+    maxHeight: 40,
+    marginVertical: 10
   }
 
 });

@@ -21,6 +21,7 @@ import { lightGrey, pink } from '../styles/color';
 
 import { auth } from '../config/firebase';
 import { addInterestedUser, removeInterestedUser } from '../api/posts'
+import { SafeAreaView } from 'react-native';
 
 export default function moreInfoScreen({ navigation, route }) {
 
@@ -45,87 +46,89 @@ export default function moreInfoScreen({ navigation, route }) {
   }
 
   return (
-    <ScrollView contentContainerStyle={[
-      defaultStyle.scrollView, styles.scrollView
-    ]}
-    >
-
-      <StatusBar backgroundColor='black' />
-
-
-      <ImageBackground
-        source={{
-          uri: "https://picsum.photos/seed/" + Math.random() + "/500/500",
-        }}
-        resizeMode={"cover"}
-        style={styles.image}
+    <SafeAreaView style={{ width: '100%', height: '100%' }}>
+      <ScrollView contentContainerStyle={[
+        defaultStyle.scrollView, styles.scrollView
+      ]}
       >
 
-        <Close
-          onPress={() => closeMoreInfo()}
-        />
+        <StatusBar backgroundColor='black' />
 
-      </ImageBackground>
 
-      <View style={styles.textView}>
-        <UserBar
-          name={user.name}
-          image={user.picture}
-        />
+        <ImageBackground
+          source={{
+            uri: "https://picsum.photos/seed/" + Math.random() + "/500/500",
+          }}
+          resizeMode={"cover"}
+          style={styles.image}
+        >
 
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.type}>{type}</Text>
+          <Close
+            onPress={() => closeMoreInfo()}
+          />
 
-        <Text style={styles.description}>{description}</Text>
+        </ImageBackground>
 
-        <Text style={styles.text}>
-          Inicio da seleção: {startText.toLocaleDateString()}
+        <View style={styles.textView}>
+          <UserBar
+            name={user.name}
+            image={user.picture}
+          />
+
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.type}>{type}</Text>
+
+          <Text style={styles.description}>{description}</Text>
+
+          <Text style={styles.text}>
+            Inicio da seleção: {startText.toLocaleDateString()}
+          </Text>
+
+          <Text style={styles.text}>
+            Fim da seleção: {endText.toLocaleDateString()}
+          </Text>
+
+          <Text style={styles.area}>
+            Areas:
         </Text>
 
-        <Text style={styles.text}>
-          Fim da seleção: {endText.toLocaleDateString()}
-        </Text>
+          <ShowList
+            style={styles.list}
+            items={category}
+          />
 
-        <Text style={styles.area}>
-          Areas:
-        </Text>
-
-        <ShowList
-          style={styles.list}
-          items={category}
-        />
-
-      </View>
-      {
-        creator == auth.currentUser.uid ?
-          (
-            <LoadingButton
-              text={'EDITAR'}
-              styleButton={styles.button}
-              onPress={() => navigation
-                .navigate('create', { post: route.params })
-              }
-            />
-          )
-          :
-          interested.includes(auth.currentUser.uid) ?
+        </View>
+        {
+          creator == auth.currentUser.uid ?
             (
               <LoadingButton
-                text={'DESINSCREVER-SE'}
-                styleButton={[styles.button, { backgroundColor: 'grey' }]}
-                onPress={() => removeInterested()}
+                text={'EDITAR'}
+                styleButton={styles.button}
+                onPress={() => navigation
+                  .navigate('create', { post: route.params })
+                }
               />
             )
             :
-            (
-              <LoadingButton
-                text={'INSCREVER-SE'}
-                styleButton={styles.button}
-                onPress={() => addInterested()}
-              />
-            )
-      }
-    </ScrollView>
+            interested.includes(auth.currentUser.uid) ?
+              (
+                <LoadingButton
+                  text={'DESINSCREVER-SE'}
+                  styleButton={[styles.button, { backgroundColor: 'grey' }]}
+                  onPress={() => removeInterested()}
+                />
+              )
+              :
+              (
+                <LoadingButton
+                  text={'INSCREVER-SE'}
+                  styleButton={styles.button}
+                  onPress={() => addInterested()}
+                />
+              )
+        }
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 

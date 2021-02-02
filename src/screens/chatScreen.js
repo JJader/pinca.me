@@ -12,6 +12,7 @@ import { addChatToUser, getUserData } from '../api/user'
 import { database, auth } from '../config/firebase'
 
 import { StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native'
 
 
 var chatsRef;
@@ -103,15 +104,17 @@ export default function chatScreen({ navigation, route }) {
 
   return (
     <>
-      <Close
-        onPress={() => { navigation.goBack() }}
-      />
-      < GiftedChat
-        messages={messages}
-        user={user}
-        onSend={handleSend}
+      <SafeAreaView style={{ width: '100%', height: '100%' }}>
+        <Close
+          onPress={() => { navigation.goBack() }}
+        />
+        < GiftedChat
+          messages={messages}
+          user={user}
+          onSend={handleSend}
 
-      />
+        />
+      </SafeAreaView>
     </>
   )
 }
