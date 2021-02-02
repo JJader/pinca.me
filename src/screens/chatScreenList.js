@@ -59,7 +59,7 @@ export default function chatScreenList({ navigation }) {
   return (
 
     <View style={defaultStyle.container}>
-      <Text style={defaultStyle.title}>CHAT</Text>
+      <Text style={defaultStyle.title}>Chat</Text>
 
       < FlatList
         data={chats}

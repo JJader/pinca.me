@@ -88,7 +88,8 @@ export default function profileScreen({ user, navigation, route }) {
       navigation.navigate("edit")
     }
     else if (screenState == OTHER_PROFILE) {
-      route.params.user.talk();
+      const destinataryId = route.params.user.id
+      navigation.navigate("chat", { destinataryId });
     }
   }
 
